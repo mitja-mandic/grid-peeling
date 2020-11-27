@@ -44,31 +44,30 @@ bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil l
 $O(n^2)$. Jarvisov obhod se največkrat uporablja za majhne $n$ ali pa v primeru, ko pričakujemo, da bo $h$ zelo majhen glede na $n$.
 
 \begin{lstlisting}
-def jarvis_march(points):
-    # find the leftmost point
-    a =  min(points, key = lambda point: point.x)
-    index = points.index(a)
+def jarvis_march(seznam):
+    a =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
+    index = seznam.index(a)
     
     # selection sort
     l = index
-    result = []
-    result.append(a)
+    rezultat = []
+    rezultat.append(a)
     while (True):
-        q = (l + 1) % len(points)
-        for i in range(len(points)):
+        q = (l + 1) % len(seznam)
+        for i in range(len(seznam)):
             if i == l:
                 continue
             # find the greatest left turn
             # in case of collinearity, consider the farthest point
-            d = direction(points[l], points[i], points[q])
-            if d > 0 or (d == 0 and distance_sq(points[i], points[l]) > distance_sq(points[q], points[l])):
+            d = direction(seznam[l], seznam[i], seznam[q])
+            if d > 0 or (d == 0 and distance_sq(seznam[i], seznam[l]) > distance_sq(seznam[q], seznam[l])):
                 q = i
         l = q
         if l == index:
             break
-        result.append(points[q])
+        rezultat.append(seznam[q])
 
-    return result
+    return rezultat
 \end{lstlisting}
 
 %https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Jarvis-s-March/
