@@ -49,3 +49,19 @@ def graham_scan(seznam):
         ovojnica.append(tocka)
 
     return ovojnica
+
+def grid_peel_graham(m, n):
+    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
+
+
+    ovojnice = {}
+    i = 0
+    while mreza:
+        ch = graham_scan(mreza)
+        
+        nova = list(set(mreza) - set(ch))
+        mreza = nova
+
+        ovojnice[i] = ch
+        i += 1
+    return i, ovojnice
