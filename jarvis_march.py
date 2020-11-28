@@ -1,35 +1,5 @@
 from razredi import Tocka
 
-#class Point:
-#    def __init__(self, x, y):
-#        self.x = x
-#        self.y = y
-#
-#    def subtract(self, p):
-#    	return Point(self.x - p.x, self.y - p.y)
-#
-#    def __str__(self):
-#        return '(' + str(self.x) + ', ' + str(self.y) + ')'
-#
-#def distance_sq(p1, p2):
-#    return (p1.x - p2.x)**2 + (p1.y - p2.y)**2
-# calculates the cross product of vector p1 and p2
-# if p1 is clockwise from p2 wrt origin then it returns +ve value
-# if p2 is anti-clockwise from p2 wrt origin then it returns -ve value
-# if p1 p2 and origin are collinear then it returs 0
-#
-#def cross_product(p1, p2):
-#	return p1.x * p2.y - p2.x * p1.y
-#
-#
-#def direction(p1, p2, p3):
-#	return  cross_product(p3.subtract(p1), p2.subtract(p1))
-#
-# returns the cross product of vector p1p3 and p1p2
-# if p1p3 is clockwise from p1p2 it returns +ve value
-# if p1p3 is anti-clockwise from p1p2 it returns -ve value
-# if p1 p2 and p3 are collinear it returns 0
-
 def jarvis_march(seznam):
     zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
     indeks = seznam.index(zacetna_tocka)
@@ -60,7 +30,6 @@ def jarvis_march(seznam):
 
 def grid_peel_jarvis(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
-
 
     ovojnice = {}
     i = 0

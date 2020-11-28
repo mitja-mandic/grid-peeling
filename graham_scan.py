@@ -53,7 +53,6 @@ def graham_scan(seznam):
 def grid_peel_graham(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
 
-
     ovojnice = {}
     i = 0
     while mreza:

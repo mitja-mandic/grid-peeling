@@ -37,6 +37,46 @@ Po izvedenem eksperimentalnem delu, bomo rezultate analizirali in jih primerjali
 mreži v primerjavi s simetrično.
 
 \section{Orodja in algoritmi}
+Za uporabo algoritmov v Pythonu sva morala najprej definirati razred Točka, s katerim bova konstruirala vsa potrebna orodja in funkcije za uporabo algoritmov za iskanje konveksnih ovojnic.
+
+\begin{lstlisting}
+    class Tocka:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def kot_med_dvema(self, other):
+        if self.x != other.x:
+            return (self.y - other.y) / (self.x - other.x)
+        else:
+            return 90
+
+    def vektorski_produkt(self, other): 
+        return self.x * other.y - self.y * other.x
+
+    def razlika(self, other):
+    	return Tocka(self.x - other.x, self.y - other.y)
+
+    def smer_razlike(self, other, another):
+        vekt_p = Tocka(self.x - other.x, self.y-other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
+        if vekt_p > 0:
+            return 1
+        elif vekt_p < 0:
+            return -1
+        else:
+            return 0
+    
+    def razdalja(self, other):
+        return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
+
+    def __str__(self):
+        return '(' + str(self.x) + ', ' + str(self.y) + ')'
+
+    def uredi_po_kotu(seznam):
+        prvi = seznam[0]
+        return [prvi] + sorted(seznam[1:], key=lambda x: prvi.kot_med_dvema(x))
+\end{lstlisting}
+
 \subsection{Jarvisov obhod}
 Jarvisov obhod (angl. \textit{Jarvis March}) ali algoritem zavijanja darila je postopek, ki dani množici točk poišče konveksno ovojnico v eni ali več dimenzijah (osredotočili se 
 bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil leta 1973. Časovna zahtevnost algoritma je $O(nh)$, kjer $n$ predstavlja število vseh točk, $h$ pa 
@@ -44,66 +84,73 @@ bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil l
 $O(n^2)$. Jarvisov obhod se največkrat uporablja za majhne $n$ ali pa v primeru, ko pričakujemo, da bo $h$ zelo majhen glede na $n$.
 
 \begin{lstlisting}
-def jarvis_march(seznam):
-    a =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
-    index = seznam.index(a)
-    
-    # selection sort
-    l = index
+    def jarvis_march(seznam):
+    zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x)
+    indeks = seznam.index(zacetna_tocka)
+    l = indeks
     rezultat = []
-    rezultat.append(a)
+    rezultat.append(zacetna_tocka)
     while (True):
         q = (l + 1) % len(seznam)
         for i in range(len(seznam)):
             if i == l:
                 continue
-            # find the greatest left turn
-            # in case of collinearity, consider the farthest point
-            d = direction(seznam[l], seznam[i], seznam[q])
-            if d > 0 or (d == 0 and distance_sq(seznam[i], seznam[l]) > distance_sq(seznam[q], seznam[l])):
+            d = seznam[i].smer_razlike(seznam[l],  seznam[q])
+            if d > 0 or (d == 0 and seznam[i].razdalja(seznam[l]) > seznam[q].razdalja(seznam[l])):
                 q = i
         l = q
-        if l == index:
-            break
+        if l == indeks:
+            break 
         rezultat.append(seznam[q])
-
     return rezultat
 \end{lstlisting}
 
 %https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Jarvis-s-March/
 
 \subsection{Grahamov pregled}
-Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
+Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. 
+V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
 
 \begin{lstlisting}
-def convex_hull_graham(points):
-    TURN_LEFT, TURN_RIGHT, TURN_NONE = (1, - 1, 0)
-
-    def cmp(a, b):
-        return (a > b) - (a < b)
-
-    def turn(p, q, r):
-        return cmp((q[0] - p[0])*(r[1] - p[1]) - (r[0] - p[0])*(q[1] - p[1]), 0)
-
-    def _keep_left(hull, r):
-        while len(hull) > 1 and turn(hull[-2], hull[-1], r) != TURN_LEFT:
-            hull.pop()
-        if not len(hull) or hull[ - 1] != r:
-            hull.append(r)
-        return hull
-
-    points = sorted(points)
-    l = reduce(_keep_left, points, [])
-    u = reduce(_keep_left, reversed(points), [])
-    return l.extend(u[i] for i in range(1, len(u) - 1)) or l
+    def graham_scan(seznam):
+    urejene_tocke = uredi_po_kotu(seznam)
+    ovojnica = []
+    for tocka in urejene_tocke:
+        while len(ovojnica) > 1 and ovojnica[-1].smer_razlike(ovojnica[-2], tocka) <= 0:
+            ovojnica.pop()
+        ovojnica.append(tocka)
+    return ovojnica
 \end{lstlisting}
 
-%https://gist.github.com/arthur-e/5cf52962341310f438e96c1f3c3398b8
+\section{Grid-peeling algoritem}
+S pomočjo že omenjenih algoritmov sedaj lahko izpeljemo algoritem za luplenje konveksnih ovojnic. Glede na vrsto iskanja konveksnih ovojnic, torej po Jarvisovem ali 
+Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v katerem iščemo konveksno ovojnico.
 
-%lahko tudi algoritem iz 
-%https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Graham-Scan/
+\begin{lstlisting}
+    def grid_peel_jarvis(m, n):
+    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
+    ovojnice = {}
+    i = 0
+    while mreza:
+        ch = jarvis_march(mreza)
+        nova = list(set(mreza) - set(ch))
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    return i, ovojnice
 
-
+    def grid_peel_graham(m, n):
+    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
+    ovojnice = {}
+    i = 0
+    while mreza:
+        ch = graham_scan(mreza)
+        nova = list(set(mreza) - set(ch))
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    return i, ovojnice
+\end{lstlisting}
 
 \section{Rezultati}
 
