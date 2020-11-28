@@ -67,13 +67,25 @@ def graham_scan(seznam):
     return ovojnica
 
 
-mreza = mreza(4,4)
+#mreza = mreza(4,4)
 ##[print(x) for x in mreza]
 #print(uredi_po_kotu(mreza))
 
 #nova_mreza = list(set(mreza) - set(graham_scan(mreza)))
 
 #print(graham_scan(nova_mreza))
+
+def grid_peel(m, n, k):
+    tocke = mreza(m, n)
+    for i in range(k):
+        ch = graham_scan(tocke)
+        for tocka in ch:
+            tocke.remove(tocka)
+        i += 1
+    return tocke
+
+#print(grid_peel(4,4,2))
+
 
 class Point:
     def __init__(self, x, y):
