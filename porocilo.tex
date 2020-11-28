@@ -14,7 +14,7 @@
 \author{Gašper Pust, Mitja Mandić}
 
 \begin{document}
-\lstset{language=Python, breaklines=true, columns=fullflexible, basicstyle=\ttfamily}
+\lstset{language=Python, breaklines=true, numbers=left, columns=fullflexible, basicstyle=\ttfamily}
 \begin{titlepage}
  \maketitle
 % \thispagestyle{empty}
@@ -36,11 +36,12 @@ Za $n \times m$ mrežo v literaturi ni navedenih podatkov, zanimala naju bo more
 Po izvedenem eksperimentalnem delu, bomo rezultate analizirali in jih primerjali z rezultati iz literature. Zanimalo nas bo, kako drugačno je število ovojnic na $m \times n$
 mreži v primerjavi s simetrično.
 
+\newpage
 \section{Orodja in algoritmi}
 Za uporabo algoritmov v Pythonu sva morala najprej definirati razred Točka, s katerim bova konstruirala vsa potrebna orodja in funkcije za uporabo algoritmov za iskanje konveksnih ovojnic.
 
 \begin{lstlisting}
-    class Tocka:
+class Tocka:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -84,7 +85,7 @@ bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil l
 $O(n^2)$. Jarvisov obhod se največkrat uporablja za majhne $n$ ali pa v primeru, ko pričakujemo, da bo $h$ zelo majhen glede na $n$.
 
 \begin{lstlisting}
-    def jarvis_march(seznam):
+def jarvis_march(seznam):
     zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x)
     indeks = seznam.index(zacetna_tocka)
     l = indeks
@@ -105,6 +106,10 @@ $O(n^2)$. Jarvisov obhod se največkrat uporablja za majhne $n$ ali pa v primeru
     return rezultat
 \end{lstlisting}
 
+Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Ustvarimo prazen seznam, v katerega bomo postopoma dodajali točke, ki jih bomo obiskali. Vanj najprej dodamo začetno točko,
+potem pa od trenutne točke poiščemo največji levi ovinek in gremo v tisto točko (v primeru kolinearnosti, gremo v točko, ke je od naše točke najdlje). To točko dodamo v seznam in se postavimo
+tja (del kode od 7. do 15. vrstice). To počnemo, dokler ne pridemo nazaj v začetno točko in takrat se algoritem ustavi.
+
 %https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Jarvis-s-March/
 
 \subsection{Grahamov pregled}
@@ -112,7 +117,7 @@ Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \tex
 V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
 
 \begin{lstlisting}
-    def graham_scan(seznam):
+def graham_scan(seznam):
     urejene_tocke = uredi_po_kotu(seznam)
     ovojnica = []
     for tocka in urejene_tocke:
@@ -122,12 +127,15 @@ V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovn
     return ovojnica
 \end{lstlisting}
 
-\section{Grid-peeling algoritem}
+Najprej točke iz seznama točk uredimo po kotu in ustvarimo prazen seznam, v katerega bomo dodajali točke, ki so v konveksni ovojnici. Za točko potem pogledamo (naredimo neki k mi ni čist
+jasno) in dodamo točko v ovojnico. To storimo za vse točke v urejenem seznamu (od 4. do 7. vrstice).
+
+\section{Grid-peel algoritem}
 S pomočjo že omenjenih algoritmov sedaj lahko izpeljemo algoritem za luplenje konveksnih ovojnic. Glede na vrsto iskanja konveksnih ovojnic, torej po Jarvisovem ali 
 Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v katerem iščemo konveksno ovojnico.
 
 \begin{lstlisting}
-    def grid_peel_jarvis(m, n):
+def grid_peel_jarvis(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
     i = 0
@@ -138,8 +146,9 @@ Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v k
         ovojnice[i] = ch
         i += 1
     return i, ovojnice
-
-    def grid_peel_graham(m, n):
+\end{lstlisting}
+\begin{lstlisting}
+def grid_peel_graham(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
     i = 0
