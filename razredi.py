@@ -22,7 +22,7 @@ class Tocka:
 
     def smer_razlike(self, other, another):
         
-        vekt_p = Tocka(self.x - other.x, self.y-other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
+        vekt_p = Tocka(self.x - other.x, self.y - other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
         
         if vekt_p > 0:
             return 1
