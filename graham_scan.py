@@ -1,4 +1,5 @@
-from razredi import Tocka, naredi_neenakomerno, smer_razlike
+from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno
+import time
 
 #sez = [Tocka(i,j) for i in range(4) for j in range(4)]
 
@@ -50,17 +51,40 @@ def graham_scan(seznam):
 
     return ovojnica
 
-def grid_peel_graham(m, n):
+def grid_peel_graham_enakomerna(m, n):
+    start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
 
     ovojnice = {}
     i = 0
     while mreza or len(mreza) > 1:
         ch = graham_scan(mreza)
-        print(ch)
+        #print(ch)
         nova = [x for x in mreza if x not in ch]
         mreza = nova
-
-        ovojnice[i] = ch
         i += 1
-    return i, ovojnice
+        ovojnice[i] = ch
+    casovna_zahtevnost = time.time() - start 
+    return i, ovojnice, casovna_zahtevnost
+
+def grid_peel_graham_potencna(m, n):
+    start = time.time()
+    mreza = naredi_potencno(m, n)
+
+    ovojnice = {}
+    i = 0
+    while mreza or len(mreza) > 1:
+        ch = graham_scan(mreza)
+        #print(ch)
+        nova = [x for x in mreza if x not in ch]
+        mreza = nova
+        i += 1
+        ovojnice[i] = ch
+    casovna_zahtevnost = time.time() - start 
+    return i, ovojnice, casovna_zahtevnost
+
+#print(grid_peel_graham_enakomerna(50, 50))
+def tabela_graham_enakomerna(m,n):
+    return [grid_peel_graham_enakomerna(i,j)[2] for i in range(m) for j in range(n)]
+
+#print(tabela(20,20))
