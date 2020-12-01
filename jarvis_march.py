@@ -1,5 +1,4 @@
 from razredi import Tocka, naredi_neenakomerno, smer_razlike
-
 #class Point:
 #    def __init__(self, x, y):
 #        self.x = x
@@ -29,7 +28,6 @@ from razredi import Tocka, naredi_neenakomerno, smer_razlike
 # if p1p3 is clockwise from p1p2 it returns +ve value
 # if p1p3 is anti-clockwise from p1p2 it returns -ve value
 # if p1 p2 and p3 are collinear it returns 0
-
 def jarvis_march(seznam):
     zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
     indeks = seznam.index(zacetna_tocka)
@@ -63,7 +61,6 @@ def jarvis_march(seznam):
 
 def grid_peel_jarvis_enakomerna(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
-
 
     ovojnice = {}
     i = 0

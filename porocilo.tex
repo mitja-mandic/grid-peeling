@@ -14,7 +14,7 @@
 \author{Gašper Pust, Mitja Mandić}
 
 \begin{document}
-\lstset{language=Python, breaklines=true, columns=fullflexible, basicstyle=\ttfamily}
+\lstset{language=Python, breaklines=true, numbers=left, columns=fullflexible, basicstyle=\ttfamily}
 \begin{titlepage}
  \maketitle
 % \thispagestyle{empty}
@@ -23,20 +23,65 @@
 %\pagebreak
 
 \section{Predstavitev problema}
-V projektu si bomo podrobneje ogledali konveksne ovojnice $m \times n$ mreže. Konveksna ovojnica množice je najmanjša konveksna množica, ki vsebuje dano množico.
+V projektu si bova podrobneje ogledala konveksne ovojnice $m \times n$ mreže. Konveksna ovojnica množice je najmanjša konveksna množica, ki vsebuje dano množico točk.
 Najlažje si jo predstavljamo tako, kot da bi okoli elementov množice napeli elastiko - kar elastika obkroži, je konveksna ovojnica. Lupljenje konveksnih ovojnic mreže,
-oziroma angleško \textit{grid - peeling} je proces, ko iz mreže iterativno odstranjujemo konveksne ovojnice. S simboli lahko to zapišemo takole:
-$ P_{0} = G_{n,m} = \{1,\ldots, n\} \times \{1, \ldots, m\}$. Naj bo $C_{i} = \mathcal{C}\mathcal{H}(P_{i-1}) \text{ za } i = 1, \ldots$. $V_{i}$ naj bo množica vozlišč $C_{i}$
+(angl. \textit{grid-peeling}) je proces, ko iz mreže iterativno odstranjujemo konveksne ovojnice. S simboli lahko to zapišemo takole:
+$ P_{0} = G_{m,n} = \{1,\ldots, m\} \times \{1, \ldots, n\}$. Naj bo $C_{i} = \mathcal{C}\mathcal{H}(P_{i-1}) \text{ za } i = 1, \ldots$. $V_{i}$ naj bo množica vozlišč $C_{i}$
 - kot vozlišče razumemo točko, ki je na vogalu mreže (torej za katero bi zataknili elastiko). Naj bo sedaj $P_{i} = P_{i-1} \setminus V_{i}$. Začnemo torej z $n \times m$ mrežo 
 in iterativno lupimo konveksne ovojnice, dokler ne odstranimo vseh točk.
 
 V projektni nalogi bova s pomočjo simulacij opazovala v literaturi navedene številke za $n \times n$ mrežo - teorija napoveduje $\theta(n ^ \frac{4}{3})$ ovojnic.
-Za $n \times m$ mrežo v literaturi ni navedenih podatkov, zanimala naju bo morebitna povezava. Simulacije bova izvedla tudi za točke na neenakomerni mreži.
+Za $m \times n$ mrežo v literaturi ni navedenih podatkov, zanimala pa naju bo morebitna povezava. Simulacije bova izvedla tudi za točke na neenakomerni mreži.
 
-Po izvedenem eksperimentalnem delu, bomo rezultate analizirali in jih primerjali z rezultati iz literature. Zanimalo nas bo, kako drugačno je število ovojnic na $m \times n$
+Po izvedenem eksperimentalnem delu, bova rezultate analizirala in jih primerjala z rezultati iz literature. Zanimalo naju bo, kako drugačno je število ovojnic na $m \times n$
 mreži v primerjavi s simetrično.
 
+\newpage
 \section{Orodja in algoritmi}
+Za uporabo algoritmov v Pythonu sva najprej definirala razred Točka, v katerem sva skonstruirala vsa potrebna orodja in funkcije za uporabo algoritmov za iskanje konveksnih ovojnic.
+
+\begin{lstlisting}
+class Tocka:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def kot_med_dvema(self, other):
+        if self.x != other.x:
+            return (self.y - other.y) / (self.x - other.x)
+        else:
+            return 90
+
+    def vektorski_produkt(self, other): 
+        return self.x * other.y - self.y * other.x
+
+    def razlika(self, other):
+    	return Tocka(self.x - other.x, self.y - other.y)
+
+    def smer_razlike(self, other, another):
+        vekt_p = Tocka(self.x - other.x, self.y - other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
+        if vekt_p > 0:
+            return 1
+        elif vekt_p < 0:
+            return -1
+        else:
+            return 0
+    
+    def razdalja(self, other):
+        return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
+
+    def __str__(self):
+        return '(' + str(self.x) + ', ' + str(self.y) + ')'
+
+    def uredi_po_kotu(seznam):
+        prvi = seznam[0]
+        return [prvi] + sorted(seznam[1:], key=lambda x: prvi.kot_med_dvema(x))
+\end{lstlisting}
+
+Zgornje funkcije bova uporabila v dveh različnih algoritmih za iskanje konveksnih ovojnic, in sicer v Jarvisovem obhodu in Grahamovemu pregledu.
+Oba algoritma sprejmeta seznam točk in mu priredita konveksno ovojnico, a to storita na drugačen način.
+
+\newpage
 \subsection{Jarvisov obhod}
 Jarvisov obhod (angl. \textit{Jarvis March}) ali algoritem zavijanja darila je postopek, ki dani množici točk poišče konveksno ovojnico v eni ali več dimenzijah (osredotočili se 
 bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil leta 1973. Časovna zahtevnost algoritma je $O(nh)$, kjer $n$ predstavlja število vseh točk, $h$ pa 
@@ -45,65 +90,92 @@ $O(n^2)$. Jarvisov obhod se največkrat uporablja za majhne $n$ ali pa v primeru
 
 \begin{lstlisting}
 def jarvis_march(seznam):
-    a =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
-    index = seznam.index(a)
-    
-    # selection sort
-    l = index
+    zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x)
+    indeks = seznam.index(zacetna_tocka)
+    l = indeks
     rezultat = []
-    rezultat.append(a)
+    rezultat.append(zacetna_tocka)
     while (True):
         q = (l + 1) % len(seznam)
         for i in range(len(seznam)):
             if i == l:
                 continue
-            # find the greatest left turn
-            # in case of collinearity, consider the farthest point
-            d = direction(seznam[l], seznam[i], seznam[q])
-            if d > 0 or (d == 0 and distance_sq(seznam[i], seznam[l]) > distance_sq(seznam[q], seznam[l])):
+            d = seznam[i].smer_razlike(seznam[l],  seznam[q])
+            if d > 0 or (d == 0 and seznam[i].razdalja(seznam[l]) > seznam[q].razdalja(seznam[l])):
                 q = i
         l = q
-        if l == index:
-            break
+        if l == indeks:
+            break 
         rezultat.append(seznam[q])
-
     return rezultat
 \end{lstlisting}
+
+Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Potem ustvari prazen seznam, v katerega postopoma dodajam točke, ki jih obišče. Vanj najprej doda začetno točko,
+potem pa od trenutne točke poišče največji levi ovinek in gre v tisto točko (v primeru kolinearnosti, gre v točko, ke je od trenutne točke najdlje). Točko doda v seznam 
+in jo nastavi za trenutno točko. To je del kode od 7. do 15. vrstice. Ko spet pride v začetno točko, se algoritem ustavi.
 
 %https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Jarvis-s-March/
 
 \subsection{Grahamov pregled}
-Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
+Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. 
+V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
 
+\newpage
 \begin{lstlisting}
-def convex_hull_graham(points):
-    TURN_LEFT, TURN_RIGHT, TURN_NONE = (1, - 1, 0)
-
-    def cmp(a, b):
-        return (a > b) - (a < b)
-
-    def turn(p, q, r):
-        return cmp((q[0] - p[0])*(r[1] - p[1]) - (r[0] - p[0])*(q[1] - p[1]), 0)
-
-    def _keep_left(hull, r):
-        while len(hull) > 1 and turn(hull[-2], hull[-1], r) != TURN_LEFT:
-            hull.pop()
-        if not len(hull) or hull[ - 1] != r:
-            hull.append(r)
-        return hull
-
-    points = sorted(points)
-    l = reduce(_keep_left, points, [])
-    u = reduce(_keep_left, reversed(points), [])
-    return l.extend(u[i] for i in range(1, len(u) - 1)) or l
+def graham_scan(seznam):
+    urejene_tocke = uredi_po_kotu(seznam)
+    ovojnica = []
+    for tocka in urejene_tocke:
+        while len(ovojnica) > 1 and ovojnica[-1].smer_razlike(ovojnica[-2], tocka) <= 0:
+            ovojnica.pop()
+        ovojnica.append(tocka)
+    return ovojnica
 \end{lstlisting}
 
-%https://gist.github.com/arthur-e/5cf52962341310f438e96c1f3c3398b8
+Algoritem najprej točke iz seznama točk uredi po kotu in ustvari prazen seznam, v katerega bo dodajal točke, ki so v konveksni ovojnici. Za točko potem pogleda (naredi neki k mi ni čist
+jasno) in doda točko v ovojnico. To stori za vse točke v urejenem seznamu. V kodi je ta postopek napisan od 4. do 7. vrstice.
 
-%lahko tudi algoritem iz 
-%https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Graham-Scan/
+\section{Algoritem za lupljenje konveksnih ovojnic}
+S pomočjo zgornjih algoritmov sedaj lahko izpeljemo algoritem za lupljenje konveksnih ovojnic. Glede na vrsto iskanja konveksnih ovojnic, torej po Jarvisovem ali 
+Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v katerem iščemo konveksno ovojnico.
 
+\begin{lstlisting}
+def grid_peel_jarvis(m, n):
+    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
+    ovojnice = {}
+    i = 0
+    while mreza:
+        ch = jarvis_march(mreza)
+        nova = list(set(mreza) - set(ch))
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    return i, ovojnice
+\end{lstlisting}
 
+\begin{lstlisting}
+def grid_peel_graham(m, n):
+    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
+    ovojnice = {}
+    i = 0
+    while mreza:
+        ch = graham_scan(mreza)
+        nova = list(set(mreza) - set(ch))
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    return i, ovojnice
+\end{lstlisting}
+
+V obeh primerih algoritem najprej sestavi seznam točk na mreži velikosti $m \times n$, kjer sta $m$ in $n$ naravni števili, ki jih funkcija sprejme kot argument. Potem ustvari prazno množico, 
+v katero bo potem shranjeval konveksne ovojnice. Dokler seznam točk ni prazen, algoritem na vsakem koraku poišče konveksno ovojnico (6. vrstica kode, tu se algoritma razlikujeta) in iz seznama
+mrežnih točk odstrani vse točke, ki so v konveksni ovojnici. Točke v konveksni ovojnici, dobljeni na $i$-tem koraku, doda v množico konveksnih ovojnic kot $i$-ti element in števec poveča za 1.
+To je del kode od 5. do 10. vrstice (v obeh algoritmih). Kot rezultat algoritma vrneta število korakov do prazne mreže in pa množico konveksnih ovojnic. S pomočjo slednje lahko postopek lupljenja
+konveksnih ovojnic $m \times n$ mreže tudi narišemo.
+
+\subsection{Prikaz rezultatov na primerih}
+
+\subsection{Časovna zahtevnost algoritma}
 
 \section{Rezultati}
 
