@@ -1,4 +1,5 @@
-from razredi import Tocka, naredi_neenakomerno, smer_razlike
+from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno
+import time
 #class Point:
 #    def __init__(self, x, y):
 #        self.x = x
@@ -60,6 +61,7 @@ def jarvis_march(seznam):
     return rezultat
 
 def grid_peel_jarvis_enakomerna(m, n):
+    start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
 
     ovojnice = {}
@@ -68,15 +70,31 @@ def grid_peel_jarvis_enakomerna(m, n):
 
         ch = jarvis_march(mreza)
         
-        print(ch)
+        #print(ch)
         nova = [x for x in mreza if x not in ch]
         mreza = nova
-
-        ovojnice[i] = ch
         i += 1
-    return i, ovojnice
+        ovojnice[i] = ch
+    casovna_zahtevnost = time.time() - start
+    return i, ovojnice, casovna_zahtevnost
 
+def grid_peel_jarvis_potencna(m, n):
+    start = time.time()
+    mreza = naredi_potencno(m, n)
 
+    ovojnice = {}
+    i = 0
+    while mreza or len(mreza)>1:
+
+        ch = jarvis_march(mreza)
+        
+        #print(ch)
+        nova = [x for x in mreza if x not in ch]
+        mreza = nova
+        i += 1
+        ovojnice[i] = ch
+    casovna_zahtevnost = time.time() - start        
+    return i, ovojnice, casovna_zahtevnost
 
 
 #def grid_peel_jarvis_neenakomerna(stevilo_tock):
@@ -93,3 +111,5 @@ def grid_peel_jarvis_enakomerna(m, n):
 #        ovojnice[i] = ch
 #        i += 1
 #    return i, ovojnice
+
+#print(grid_peel_jarvis_enakomerna(50,50))

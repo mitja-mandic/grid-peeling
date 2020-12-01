@@ -41,9 +41,9 @@ def smer_razlike(p,q,r):
 
 
 
-p = Tocka(0,0)
-q = Tocka(1,0.5)
-r = Tocka(2,1)
+#p = Tocka(0,0)
+#q = Tocka(1,0.5)
+#r = Tocka(2,1)
 
 #print(smer_razlike(p,q,r))
 
@@ -60,6 +60,10 @@ def naredi_neenakomerno(st_tock, zgornja_meja):
     return [Tocka(i,j) for i in seznam for j in seznam]
 #print([naredi_neenakomerno(5)])
 
+def naredi_potencno(m, n):
+    return [Tocka(2**i,2**j) for i in range(m) for j in range(n)]
+
+#print(naredi_potencno(10, 10))
 
 #nevem če ta razred zares rabimo
 #class Mreza:
