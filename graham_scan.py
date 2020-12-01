@@ -64,3 +64,4 @@ def grid_peel_graham(m, n):
         ovojnice[i] = ch
         i += 1
     return i, ovojnice
+

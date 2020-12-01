@@ -45,7 +45,7 @@ p = Tocka(0,0)
 q = Tocka(1,0.5)
 r = Tocka(2,1)
 
-print(smer_razlike(p,q,r))
+#print(smer_razlike(p,q,r))
 
 
 
