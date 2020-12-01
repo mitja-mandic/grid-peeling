@@ -1,3 +1,5 @@
+import random
+
 class Tocka:
     def __init__(self, x, y):
         self.x = x
@@ -20,16 +22,6 @@ class Tocka:
     def razlika(self, other):
     	return Tocka(self.x - other.x, self.y - other.y)
 
-    def smer_razlike(self, other, another):
-        
-        vekt_p = Tocka(self.x - other.x, self.y-other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
-        
-        if vekt_p > 0:
-            return 1
-        elif vekt_p < 0:
-            return -1
-        else:
-            return 0
     
     def razdalja(self, other):
         return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
@@ -37,12 +29,37 @@ class Tocka:
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
+    def __repr__(self):
+        return 'T(' + str(self.x) + ', ' + str(self.y) + ')'
 
-#p = Tocka(0,0)
-#q = Tocka(1,0)
-#r = Tocka(2,1)
-#
-#print(q.smer_razlike(p,r))
+#def vektorski_produkt1(p,q)
+
+
+def smer_razlike(p,q,r):
+    return p.razlika(q).vektorski_produkt(r.razlika(q))
+
+
+
+
+p = Tocka(0,0)
+q = Tocka(1,0.5)
+r = Tocka(2,1)
+
+print(smer_razlike(p,q,r))
+
+
+
+
+
+
+
+def naredi_neenakomerno(st_tock, zgornja_meja):
+    seznam = sorted(random.sample(range(zgornja_meja),st_tock))
+ 
+ #   print()
+    return [Tocka(i,j) for i in seznam for j in seznam]
+#print([naredi_neenakomerno(5)])
+
 
 #nevem če ta razred zares rabimo
 #class Mreza:
@@ -57,3 +74,4 @@ class Tocka:
 #grid = Mreza(2,2)
 #
 #print(grid.mreza())
+#print(naredi_neenakomerno(3, 10))

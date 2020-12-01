@@ -1,4 +1,4 @@
-from razredi import Tocka
+from razredi import Tocka, naredi_neenakomerno, smer_razlike
 
 #class Point:
 #    def __init__(self, x, y):
@@ -46,8 +46,11 @@ def jarvis_march(seznam):
         for i in range(len(seznam)):
             if i == l:
                 continue
+            
+            d = smer_razlike(seznam[l], seznam[i], seznam[q])
+            #d = seznam[i].smer_razlike(seznam[l],  seznam[q]) #poiščemo največji levi ovinek, v primeru kolinearnosti vključimo točko, ki je najdlje
 
-            d = seznam[i].smer_razlike(seznam[l],  seznam[q]) #poiščemo največji levi ovinek, v primeru kolinearnosti vključimo točko, ki je najdlje
+            #print(d)
             if d > 0 or (d == 0 and seznam[i].razdalja(seznam[l]) > seznam[q].razdalja(seznam[l])):
                 q = i
         l = q
@@ -58,20 +61,38 @@ def jarvis_march(seznam):
 
     return rezultat
 
-def grid_peel_jarvis(m, n):
+def grid_peel_jarvis_enakomerna(m, n):
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
 
 
     ovojnice = {}
     i = 0
-    while mreza:
+    while mreza or len(mreza)>1:
+
         ch = jarvis_march(mreza)
         
-        nova = list(set(mreza) - set(ch))
+        print(ch)
+        nova = [x for x in mreza if x not in ch]
         mreza = nova
 
         ovojnice[i] = ch
         i += 1
     return i, ovojnice
 
-#test = grid_peel_jarvis(3,3)
+
+
+
+#def grid_peel_jarvis_neenakomerna(stevilo_tock):
+#    mreza  = naredi_neenakomerno(stevilo_tock)
+#    
+#    ovojnice = {}
+#    i = 0
+#    while mreza:
+#        ch = jarvis_march(mreza)
+#        
+#        nova = list(set(mreza) - set(ch))
+#        mreza = nova
+#
+#        ovojnice[i] = ch
+#        i += 1
+#    return i, ovojnice
