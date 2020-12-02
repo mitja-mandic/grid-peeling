@@ -73,8 +73,9 @@ def grid_peel_jarvis_enakomerna(m, n):
         #print(ch)
         nova = [x for x in mreza if x not in ch]
         mreza = nova
-        i += 1
         ovojnice[i] = ch
+        i += 1
+    
     casovna_zahtevnost = time.time() - start
     return i, ovojnice, casovna_zahtevnost
 
@@ -91,8 +92,8 @@ def grid_peel_jarvis_potencna(m, n):
         #print(ch)
         nova = [x for x in mreza if x not in ch]
         mreza = nova
-        i += 1
         ovojnice[i] = ch
+        i += 1
     casovna_zahtevnost = time.time() - start        
     return i, ovojnice, casovna_zahtevnost
 
