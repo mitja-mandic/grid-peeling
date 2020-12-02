@@ -9,12 +9,34 @@
 \usepackage{amsthm}   % definicije okolij za izreke, definicije, ...
 \usepackage{amssymb}  % dodatni matematični simboli
 \usepackage{listings} % okolje za Python kodo
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{mystyle}{   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{language=Python, style=mystyle}
 
 \title{\textit{Grid-peeling}}
 \author{Gašper Pust, Mitja Mandić}
-
 \begin{document}
-\lstset{language=Python, breaklines=true, numbers=left, columns=fullflexible, basicstyle=\ttfamily}
 \begin{titlepage}
  \maketitle
 % \thispagestyle{empty}
@@ -52,20 +74,11 @@ class Tocka:
         else:
             return 90
 
-    def vektorski_produkt(self, other): 
+    def vektorski_produkt(self, other):
         return self.x * other.y - self.y * other.x
 
     def razlika(self, other):
     	return Tocka(self.x - other.x, self.y - other.y)
-
-    def smer_razlike(self, other, another):
-        vekt_p = Tocka(self.x - other.x, self.y - other.y).vektorski_produkt(Tocka(another.x - other.x, another.y - other.y))
-        if vekt_p > 0:
-            return 1
-        elif vekt_p < 0:
-            return -1
-        else:
-            return 0
     
     def razdalja(self, other):
         return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
@@ -73,9 +86,17 @@ class Tocka:
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
-    def uredi_po_kotu(seznam):
-        prvi = seznam[0]
-        return [prvi] + sorted(seznam[1:], key=lambda x: prvi.kot_med_dvema(x))
+    def __repr__(self):
+        return 'T(' + str(self.x) + ', ' + str(self.y) + ')'
+
+def smer_razlike(p,q,r):
+    return p.razlika(q).vektorski_produkt(r.razlika(q))
+
+def naredi_neenakomerno(st_tock, zgornja_meja): #naredi neenakomerno mrezo, ki je predstavljena kasneje
+    seznam = sorted(random.sample(range(zgornja_meja),st_tock))
+
+def naredi_potencno(m, n): #naredi potencno mrezo, ki je predstavljena kasneje
+    return [Tocka(2**i,2**j) for i in range(m) for j in range(n)]
 \end{lstlisting}
 
 Zgornje funkcije bova uporabila v dveh različnih algoritmih za iskanje konveksnih ovojnic, in sicer v Jarvisovem obhodu in Grahamovemu pregledu.
@@ -100,7 +121,7 @@ def jarvis_march(seznam):
         for i in range(len(seznam)):
             if i == l:
                 continue
-            d = seznam[i].smer_razlike(seznam[l],  seznam[q])
+            d = smer_razlike(seznam[l], seznam[i], seznam[q])
             if d > 0 or (d == 0 and seznam[i].razdalja(seznam[l]) > seznam[q].razdalja(seznam[l])):
                 q = i
         l = q
@@ -120,18 +141,17 @@ in jo nastavi za trenutno točko. To je del kode od 7. do 15. vrstice. Ko spet p
 Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. 
 V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
 
-\newpage
 \begin{lstlisting}
 def graham_scan(seznam):
     urejene_tocke = uredi_po_kotu(seznam)
     ovojnica = []
     for tocka in urejene_tocke:
-        while len(ovojnica) > 1 and ovojnica[-1].smer_razlike(ovojnica[-2], tocka) <= 0:
+        while len(ovojnica) > 1 and smer_razlike(ovojnica[-2], ovojnica[-1], tocka) >= 0:  
             ovojnica.pop()
         ovojnica.append(tocka)
     return ovojnica
 \end{lstlisting}
-
+\newpage
 Algoritem najprej točke iz seznama točk uredi po kotu in ustvari prazen seznam, v katerega bo dodajal točke, ki so v konveksni ovojnici. Za točko potem pogleda (naredi neki k mi ni čist
 jasno) in doda točko v ovojnico. To stori za vse točke v urejenem seznamu. V kodi je ta postopek napisan od 4. do 7. vrstice.
 
@@ -141,38 +161,48 @@ Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v k
 
 \begin{lstlisting}
 def grid_peel_jarvis(m, n):
+    start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
     i = 0
-    while mreza:
+    while mreza or len(mreza)>1:
         ch = jarvis_march(mreza)
-        nova = list(set(mreza) - set(ch))
+        nova = [x for x in mreza if x not in ch]
         mreza = nova
         ovojnice[i] = ch
         i += 1
-    return i, ovojnice
+    casovna_zahtevnost = time.time() - start
+    return i, ovojnice, casovna_zahtevnost
 \end{lstlisting}
 
 \begin{lstlisting}
 def grid_peel_graham(m, n):
+    start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
     i = 0
-    while mreza:
+    while mreza or len(mreza) > 1:
         ch = graham_scan(mreza)
-        nova = list(set(mreza) - set(ch))
+        nova = [x for x in mreza if x not in ch]
         mreza = nova
         ovojnice[i] = ch
         i += 1
-    return i, ovojnice
+    casovna_zahtevnost = time.time() - start 
+    return i, ovojnice, casovna_zahtevnost
 \end{lstlisting}
 
-V obeh primerih algoritem najprej sestavi seznam točk na mreži velikosti $m \times n$, kjer sta $m$ in $n$ naravni števili, ki jih funkcija sprejme kot argument. Potem ustvari prazno množico, 
-v katero bo potem shranjeval konveksne ovojnice. Dokler seznam točk ni prazen, algoritem na vsakem koraku poišče konveksno ovojnico (6. vrstica kode, tu se algoritma razlikujeta) in iz seznama
-mrežnih točk odstrani vse točke, ki so v konveksni ovojnici. Točke v konveksni ovojnici, dobljeni na $i$-tem koraku, doda v množico konveksnih ovojnic kot $i$-ti element in števec poveča za 1.
-To je del kode od 5. do 10. vrstice (v obeh algoritmih). Kot rezultat algoritma vrneta število korakov do prazne mreže in pa množico konveksnih ovojnic. S pomočjo slednje lahko postopek lupljenja
-konveksnih ovojnic $m \times n$ mreže tudi narišemo.
+V obeh primerih algoritem najprej označi začetni čas in sestavi seznam točk na mreži velikosti $m \times n$, kjer sta $m$ in $n$ naravni števili, ki jih funkcija sprejme kot argument. Potem ustvari 
+prazno množico, v katero bo kasneje shranjeval konveksne ovojnice. Dokler seznam točk ni prazen, algoritem na vsakem koraku poišče konveksno ovojnico (7. vrstica kode, tu se algoritma razlikujeta) 
+in iz seznama mrežnih točk odstrani vse točke, ki so v konveksni ovojnici. Točke v konveksni ovojnici, dobljeni na $i$-tem koraku, doda v množico konveksnih ovojnic kot $i$-ti element in števec 
+poveča za 1. To je del kode od 6. do 11. vrstice (v obeh algoritmih). Preden vrne rezultat, algoritem še enkrat izmeri čas in odšteje začetnega, da dobimo časovno zahtevnost. Kot rezultat algoritma 
+vrneta število korakov do prazne mreže, množico konveksnih ovojnic in pa potreben čas za izvedbo algoritma. S pomočjo množice konveksnih ovojnic lahko postopek lupljenja $m \times n$ mreže tudi narišemo.
 
+Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk, ki jo algoritem ustvari:
+\begin{itemize}
+    \item {Za potenčno mrežo, torej za točke oblike $(2^i, 2^j), 0 \leq i \leq m, 0 \leq j \leq n$, 3. vrstico algoritma spremenimo v \lstinline{mreza = naredi_potencno(m, n)}.}
+    %\item {Za naključno mrežo, 3. vrstico algoritma spremenimo v \\
+    %\lstinline{mreza = naredi_neenakomerno(stevilo_tock)}.}
+\end{itemize}
 \subsection{Prikaz rezultatov na primerih}
 
 \subsection{Časovna zahtevnost algoritma}
