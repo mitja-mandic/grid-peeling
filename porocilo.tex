@@ -10,6 +10,7 @@
 \usepackage{amssymb}  % dodatni matematični simboli
 \usepackage{listings} % okolje za Python kodo
 \usepackage{xcolor}   % okolje za barve (za kodo)
+\usepackage{graphicx}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -190,9 +191,11 @@ Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk
     %\lstinline{mreza = naredi_neenakomerno(stevilo_tock)}.}
 \end{itemize}
 
+\newpage
 \subsection{Prikaz rezultatov na primerih}
-
-\begin{figure}[h]
+Za boljšo predstavo, kako algoritem deluje, sva postopek lupljenja konveksnih ovojnic prikazala na dveh primerih. Prvi, ki je prikazan na sliki \ref{fig:11x11}, je postopek lupljenja navadne mreže
+$11 \times 11$, drugi, prikazan na sliki \ref{fig:5x5}, pa je postopek izveden na potenčni mreži $5 \times 5$, torej na mreži $16 \times 16$.
+\begin{figure}[!h]
 	\centering
 	\caption{Postopek lupljenja ovojnic $11 \times 11$ mreže}
 	\label{fig:11x11}
@@ -200,7 +203,7 @@ Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk
 	\includegraphics[scale=0.7]{11x11_enakomerna.png}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!h]
 	\centering
 	\caption{Postopek lupljenja ovojnic potenčne $5 \times 5$ mreže}
 	\label{fig:5x5}
@@ -208,9 +211,10 @@ Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk
 	\includegraphics[scale=0.7]{5x5_potencna.png}
 \end{figure}
 
+\newpage
 \subsection{Časovna zahtevnost algoritma}
 
-\begin{figure}[h]
+\begin{figure}[!h]
 	\centering
 	\caption{Število ovojnic glede na $n$}
 	\label{fig:st_ovojnic}
@@ -218,6 +222,7 @@ Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk
 	\includegraphics[scale=0.7]{st_ovojnic.jpg}
 \end{figure}
 
+\newpage
 \section{Rezultati}
 
 \section{Zaključek}
