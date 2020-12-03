@@ -9,7 +9,7 @@
 \usepackage{amsthm}   % definicije okolij za izreke, definicije, ...
 \usepackage{amssymb}  % dodatni matematični simboli
 \usepackage{listings} % okolje za Python kodo
-\usepackage{xcolor}
+\usepackage{xcolor}   % okolje za barve (za kodo)
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -37,12 +37,10 @@
 \title{\textit{Grid-peeling}}
 \author{Gašper Pust, Mitja Mandić}
 \begin{document}
+
 \begin{titlepage}
  \maketitle
-% \thispagestyle{empty}
 \end{titlepage}
-%
-%\pagebreak
 
 \section{Predstavitev problema}
 V projektu si bova podrobneje ogledala konveksne ovojnice $m \times n$ mreže. Konveksna ovojnica množice je najmanjša konveksna množica, ki vsebuje dano množico točk.
@@ -92,6 +90,10 @@ class Tocka:
 def smer_razlike(p,q,r):
     return p.razlika(q).vektorski_produkt(r.razlika(q))
 
+def uredi_po_kotu(seznam):
+    prvi = min(seznam, key = lambda tocka: (tocka.x, tocka.y))
+    return [prvi] + sorted(seznam[1:], key=lambda x: prvi.kot_med_dvema(x))
+
 def naredi_neenakomerno(st_tock, zgornja_meja): #naredi neenakomerno mrezo, ki je predstavljena kasneje
     seznam = sorted(random.sample(range(zgornja_meja),st_tock))
 
@@ -135,8 +137,6 @@ Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Potem ustvari 
 potem pa od trenutne točke poišče največji levi ovinek in gre v tisto točko (v primeru kolinearnosti, gre v točko, ke je od trenutne točke najdlje). Točko doda v seznam 
 in jo nastavi za trenutno točko. To je del kode od 7. do 15. vrstice. Ko spet pride v začetno točko, se algoritem ustavi.
 
-%https://algorithmtutor.com/Computational-Geometry/Convex-Hull-Algorithms-Jarvis-s-March/
-
 \subsection{Grahamov pregled}
 Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. 
 V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
@@ -151,6 +151,7 @@ def graham_scan(seznam):
         ovojnica.append(tocka)
     return ovojnica
 \end{lstlisting}
+
 \newpage
 Algoritem najprej točke iz seznama točk uredi po kotu in ustvari prazen seznam, v katerega bo dodajal točke, ki so v konveksni ovojnici. Za točko potem pogleda (naredi neki k mi ni čist
 jasno) in doda točko v ovojnico. To stori za vse točke v urejenem seznamu. V kodi je ta postopek napisan od 4. do 7. vrstice.
@@ -160,29 +161,13 @@ S pomočjo zgornjih algoritmov sedaj lahko izpeljemo algoritem za lupljenje konv
 Grahamovem načinu, ločimo dva algoritma, ki pa se razlikujeta le v koraku, v katerem iščemo konveksno ovojnico.
 
 \begin{lstlisting}
-def grid_peel_jarvis(m, n):
-    start = time.time()
-    mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
-    ovojnice = {}
-    i = 0
-    while mreza or len(mreza)>1:
-        ch = jarvis_march(mreza)
-        nova = [x for x in mreza if x not in ch]
-        mreza = nova
-        ovojnice[i] = ch
-        i += 1
-    casovna_zahtevnost = time.time() - start
-    return i, ovojnice, casovna_zahtevnost
-\end{lstlisting}
-
-\begin{lstlisting}
-def grid_peel_graham(m, n):
+def grid_peel_graham(m, n): # oz. grid_peel_jarvis(m, n)
     start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
     i = 0
     while mreza or len(mreza) > 1:
-        ch = graham_scan(mreza)
+        ch = graham_scan(mreza) # oz. ch = jarvis_march(mreza)
         nova = [x for x in mreza if x not in ch]
         mreza = nova
         ovojnice[i] = ch
@@ -198,14 +183,40 @@ poveča za 1. To je del kode od 6. do 11. vrstice (v obeh algoritmih). Preden vr
 vrneta število korakov do prazne mreže, množico konveksnih ovojnic in pa potreben čas za izvedbo algoritma. S pomočjo množice konveksnih ovojnic lahko postopek lupljenja $m \times n$ mreže tudi narišemo.
 
 Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk, ki jo algoritem ustvari:
+
 \begin{itemize}
     \item {Za potenčno mrežo, torej za točke oblike $(2^i, 2^j), 0 \leq i \leq m, 0 \leq j \leq n$, 3. vrstico algoritma spremenimo v \lstinline{mreza = naredi_potencno(m, n)}.}
     %\item {Za naključno mrežo, 3. vrstico algoritma spremenimo v \\
     %\lstinline{mreza = naredi_neenakomerno(stevilo_tock)}.}
 \end{itemize}
+
 \subsection{Prikaz rezultatov na primerih}
 
+\begin{figure}[h]
+	\centering
+	\caption{Postopek lupljenja ovojnic $11 \times 11$ mreže}
+	\label{fig:11x11}
+	\vspace{2mm}
+	\includegraphics[scale=0.7]{11x11_enakomerna.png}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\caption{Postopek lupljenja ovojnic potenčne $5 \times 5$ mreže}
+	\label{fig:5x5}
+	\vspace{2mm}
+	\includegraphics[scale=0.7]{5x5_potencna.png}
+\end{figure}
+
 \subsection{Časovna zahtevnost algoritma}
+
+\begin{figure}[h]
+	\centering
+	\caption{Število ovojnic glede na $n$}
+	\label{fig:st_ovojnic}
+	\vspace{2mm}
+	\includegraphics[scale=0.7]{st_ovojnic.jpg}
+\end{figure}
 
 \section{Rezultati}
 
