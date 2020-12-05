@@ -8,7 +8,10 @@ def jarvis_march(seznam):
     rezultat = []
     rezultat.append(zacetna_tocka)
     while (True):
+
         q = (l + 1) % len(seznam)      
+        print(q)
+        
         for i in range(len(seznam)):
             if i == l:
                 continue  
@@ -48,3 +51,4 @@ def grid_peel_jarvis_potencna(m, n):
         i += 1
     casovna_zahtevnost = time.time() - start        
     return i, ovojnice, casovna_zahtevnost
+grid_peel_jarvis_enakomerna(5,5)

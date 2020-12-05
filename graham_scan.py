@@ -1,5 +1,8 @@
 from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno
 import time
+from mpl_toolkits.mplot3d import Axes3D
+
+
 
 def uredi_po_kotu(seznam):
     prvi = min(seznam, key = lambda tocka: (tocka.x, tocka.y))
