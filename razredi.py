@@ -42,13 +42,10 @@ def naredi_potencno(m, n):
     return [Tocka(2**i,2**j) for i in range(m) for j in range(n)]
 
 def kvazi_cantor_mreza(n):
-
     sez = [0,3]
     for i in range(1,n):
         nasl_dol = sez[0] - 3 ** i
         nasl_gor = sez[-1] + 3 ** i
-        
         sez.append(nasl_gor)
         sez = [nasl_dol] + sez
-        
     return [Tocka(i,j) for i in sez for j in sez]

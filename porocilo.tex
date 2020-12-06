@@ -95,11 +95,17 @@ def uredi_po_kotu(seznam):
     prvi = min(seznam, key = lambda tocka: (tocka.x, tocka.y))
     return [prvi] + sorted(seznam[1:], key=lambda x: prvi.kot_med_dvema(x))
 
-def naredi_neenakomerno(st_tock, zgornja_meja): #naredi neenakomerno mrezo, ki je predstavljena kasneje
-    seznam = sorted(random.sample(range(zgornja_meja),st_tock))
-
 def naredi_potencno(m, n): #naredi potencno mrezo, ki je predstavljena kasneje
     return [Tocka(2**i,2**j) for i in range(m) for j in range(n)]
+
+def kvazi_cantor_mreza(n): #naredi Cantorjevo mrezo, ki je predstavljena kasneje
+    sez = [0,3]
+    for i in range(1,n):
+        nasl_dol = sez[0] - 3 ** i
+        nasl_gor = sez[-1] + 3 ** i
+        sez.append(nasl_gor)
+        sez = [nasl_dol] + sez
+    return [Tocka(i,j) for i in sez for j in sez]
 \end{lstlisting}
 
 Zgornje funkcije bova uporabila v dveh različnih algoritmih za iskanje konveksnih ovojnic, in sicer v Jarvisovem obhodu in Grahamovemu pregledu.
@@ -187,42 +193,50 @@ ovojnic lahko postopek lupljenja $m \times n$ mreže tudi narišemo.
 Za primer, ko mreža ni enakomerna, v algoritmih samo prilagodimo množico točk, ki jo algoritem ustvari:
 
 \begin{itemize}
-    \item {Za potenčno mrežo, torej za točke oblike $(2^i, 2^j), 0 \leq i \leq m, 0 \leq j \leq n$, 3. vrstico algoritma spremenimo v \lstinline{mreza = naredi_potencno(m, n)}.}
-    %\item {Za naključno mrežo, 3. vrstico algoritma spremenimo v \\
-    %\lstinline{mreza = naredi_neenakomerno(stevilo_tock)}.}
+    \item {Za potenčno mrežo, torej za mrežo točk oblike $(2^i, 2^j), 0 \leq i \leq m-1, 0 \leq j \leq n-1$, 3. vrstico algoritma spremenimo v \lstinline{mreza = naredi_potencno(m, n)}.}
+    \item {Za Cantorjevo mrežo, torej za mrežo točk oblike $neka oblika$, 3. vrstico algoritma spremenimo v \lstinline{mreza = kvazi_cantor_mreza(n)}.}
 \end{itemize}
 
 \newpage
 \subsection{Prikaz rezultatov na primerih}
-Za boljšo predstavo, kako algoritem deluje, sva postopek lupljenja konveksnih ovojnic prikazala na treh primerih. Prvi, ki je prikazan na sliki \ref{fig:11x11}, je postopek lupljenja 
-navadne mreže$11 \times 11$, drugi, prikazan na sliki \ref{fig:10x15}, je psotopek lupljenja mreže velikosti $10 \times 15$, tretji, prikazan na sliki \ref{fig:5x5}, pa je postopek 
-izveden na potenčni mreži velikosti $5 \times 5$, torej s točkami na mreži $16 \times 16$, ki so potence števila $2$.
+Za boljšo predstavo, kako algoritem deluje, sva postopek lupljenja konveksnih ovojnic prikazala na nekaj primerih. Prvi, ki je prikazan na sliki \ref{fig:11x11}, je postopek lupljenja 
+navadne mreže velikosti $11 \times 11$, drugi, prikazan na sliki \ref{fig:15x10}, pa je psotopek lupljenja navadne mreže velikosti $15 \times 10$. 
 
 \begin{figure}[!h]
 	\centering
 	\caption{Postopek lupljenja ovojnic $11 \times 11$ mreže}
 	\label{fig:11x11}
-	\vspace{2mm}
-	\includegraphics[scale=0.5]{11x11_enakomerna.png}
+	%\vspace{2mm}
+	\includegraphics[scale=0.5]{slike/11x11_enakomerna.png}
 \end{figure}
 
 \begin{figure}[!h]
 	\centering
-	\caption{Postopek lupljenja ovojnic $10 \times 15$ mreže}
-	\label{fig:10x15}
-	\vspace{2mm}
-	\includegraphics[scale=0.5]{10x15_enakomerna.jpg}
+	\caption{Postopek lupljenja ovojnic $15 \times 10$ mreže}
+	\label{fig:15x10}
+	%\vspace{2mm}
+	\includegraphics[scale=0.5]{slike/15x10_enakomerna.jpg}
 \end{figure}
+
+Na sliki \ref{fig:5x5} je prikazan postopek na potenčni mreži velikosti $5 \times 5$, na sliki \ref{fig:cantor} pa postopek na Cantorjevi mreži velikosti $4 \times 4$.
 
 \begin{figure}[!h]
 	\centering
 	\caption{Postopek lupljenja ovojnic potenčne $5 \times 5$ mreže}
 	\label{fig:5x5}
-	\vspace{2mm}
-	\includegraphics[scale=0.5]{5x5_potencna.png}
+	%\vspace{2mm}
+	\includegraphics[scale=0.5]{slike/5x5_potencna.png}
 \end{figure}
 
+\begin{figure}[!h]
+	\centering
+	\caption{Postopek lupljenja ovojnic Cantorjeve $4 \times 4$ mreže}
+	\label{fig:cantor}
+	%\vspace{2mm}
+	\includegraphics[scale=0.5]{slike/kvazi_cantor.jpg}
+\end{figure}
 
+\newpage
 \subsection{Časovna zahtevnost algoritma}
 Najprej bova prikazala časovno primerjavo med Jarvisovim obhodom in Grahamovim pregledom. Glede na izbrani algoritem za iskanje konveksnih ovojnic se čas izvajanja algoritma za lupljenje
 lahko zelo razlikuje, kar je jasno razvidno iz slike \ref{fig:cas}. Tu sva prikazala samo primer $n \times n$ mreže, vendar pa je za $m \times n$ mreže rezultat podoben.
@@ -231,33 +245,25 @@ lahko zelo razlikuje, kar je jasno razvidno iz slike \ref{fig:cas}. Tu sva prika
 	\centering
 	\caption{Čas izvedbe algoritma lupljenja konveksnih ovojnic $n \times n$ mreže v odvisnosti od $n$}
 	\label{fig:cas}
-	\vspace{2mm}
-	\includegraphics[scale=0.6]{cas.jpg}
+	%\vspace{2mm}
+	\includegraphics[scale=0.6]{slike/cas.jpg}
 \end{figure}
 
 Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $\mathcal{O}(n ^ \frac{4}{3})$, kar pomeni, da je število konveksnih ovojnic na $n \times n$ mreži $\theta(n ^ \frac{4}{3})$.
-Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n$, kjer za $n$ vzamemo naravna števila od $1$ do $150$. Opazimo, da se razmerju med 
-številom ovojnic in velikostjo mreže najbolj prilega funkcija $0,6 \cdot n ^ \frac{4}{3}$. Za $n \times n$ mrežo se torej eksperimentalni rezultat ujema s tistim, navedenim v literaturi.
+Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n$, kjer za $n$ vzamemo naravna števila od $1$ do $50$ in mreže različnih vrst. 
+Opazimo, da se razmerju med številom ovojnic in velikostjo navadne mreže najbolj prilega funkcija $0,6 \cdot n ^ \frac{4}{3}$. Eksperimentalni rezultat se torej ujema s tistim, navedenim v 
+literaturi. Za potenčne $n \times n$ mreže je najboljša funkcija, ki prikaže razmerje med številom konveksnih ovojnic in velikostjo mreže, $1,2 \cdot n$, torej je časovna zahtevnost algoritma
+v tem primeru $\mathcal{O}(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo časovno zahtevnost $\mathcal{O}(n)$.
 
 \begin{figure}[!h]
 	\centering
-	\caption{Število ovojnic $n \times n$ mreže v odvisnosti od $n$}
+	\caption{Število ovojnic različnih $n \times n$ mrež v odvisnosti od $n$ (ni še prava slika)}
 	\label{fig:st_ovojnic}
-	\vspace{2mm}
-	\includegraphics[scale=0.6]{st_ovojnic.jpg}
+	%\vspace{2mm}
+	\includegraphics[scale=0.6]{slike/st_ovojnic.jpg}
 \end{figure}
 
-Za potenčne $n \times n$ mreže dobimo podoben rezultat, ki se od navadnih mrež razlikuje le za konstanto, saj se razmerju med številom ovojnic in $n$ najbolj prilega funkcija
-$1,2 \cdot n$. Ta primer je prikazan na sliki \ref{fig:st_ovojnic_potencna}. Časovna zahtevnost je torej $\mathcal{O}(n)$.
-
-\begin{figure}[!h]
-	\centering
-	\caption{Število ovojnic potenčne $n \times n$ mreže v odvisnosti od $n$}
-	\label{fig:st_ovojnic_potencna}
-	\vspace{2mm}
-	\includegraphics[scale=0.6]{st_ovojnic_potencna.jpg}
-\end{figure}
-
+\newpage
 Za $m \times n$ mreže v literaturi ni omenjene časovne zahtevnosti, zato sva jo poiskušala določiti sama. Število ovojnic je tu odvisno od dveh parametrov, $m$ in $n$, zato je ta graf 
 tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 
@@ -265,14 +271,14 @@ tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 	\centering
 	\caption{Število ovojnic $m \times n$ mreže v odvisnosti od $m$ in $n$}
 	\label{fig:3d}
-	\vspace{2mm}
-	\includegraphics[scale=0.6]{mxn_3d.png}
+	%\vspace{2mm}
+	\includegraphics[scale=0.6]{slike/mxn_3d.png}
 \end{figure}
 
 \section{Rezultati}
-Kot že rečeno se za $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma na
-tej vrsti mrež je torej $\mathcal{O}(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
-$\mathcal{O}(n)$, torej manjša kot pri navadni $n \times n$ mreži.
+Kot že rečeno se za navadne $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma na
+je v tem primeru torej $\mathcal{O}(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
+$\mathcal{O}(?)$, za Cantorjeve mreže pa $\mathcal{O}(?)$.
 Za mreže velikosti $m \times n$ v literaturi ni bilo podatka o časovni zahtevnosti, zato sva jo določila eksperimentalno. Ugotovila sva, da je za take mreže časovna zahtevnost algoritma 
 $\mathcal{O}(?)$. 
 
