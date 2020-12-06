@@ -246,24 +246,24 @@ lahko zelo razlikuje, kar je jasno razvidno iz slike \ref{fig:cas}. Tu sva prika
 	\caption{Čas izvedbe algoritma lupljenja konveksnih ovojnic $n \times n$ mreže v odvisnosti od $n$}
 	\label{fig:cas}
 	%\vspace{2mm}
-	\includegraphics[scale=0.6]{slike/cas.jpg}
+	\includegraphics[scale=0.7]{slike/cas.jpg}
 \end{figure}
 
 Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $\mathcal{O}(n ^ \frac{4}{3})$, kar pomeni, da je število konveksnih ovojnic na $n \times n$ mreži $\theta(n ^ \frac{4}{3})$.
-Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n$, kjer za $n$ vzamemo naravna števila od $1$ do $50$ in mreže različnih vrst. 
-Opazimo, da se razmerju med številom ovojnic in velikostjo navadne mreže najbolj prilega funkcija $0,6 \cdot n ^ \frac{4}{3}$. Eksperimentalni rezultat se torej ujema s tistim, navedenim v 
-literaturi. Za potenčne $n \times n$ mreže je najboljša funkcija, ki prikaže razmerje med številom konveksnih ovojnic in velikostjo mreže, $1,2 \cdot n$, torej je časovna zahtevnost algoritma
-v tem primeru $\mathcal{O}(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo časovno zahtevnost $\mathcal{O}(n)$.
+Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n$, kjer za $n$ vzamemo naravna števila od $1$ do $35$ in mreže različnih vrst. 
+Opazimo, da se razmerju med številom ovojnic in velikostjo navadne mreže najbolj prilega funkcija $1,5 \cdot n ^ \frac{4}{3}$. Eksperimentalni rezultat se torej ujema s tistim, navedenim v 
+literaturi. Za potenčne $n \times n$ mreže je najboljša funkcija, ki prikaže razmerje med številom konveksnih ovojnic in velikostjo mreže, $2,3 \cdot n$, torej je časovna zahtevnost algoritma
+v tem primeru $\mathcal{O}(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo časovno zahtevnost $\mathcal{O}(n^2)$, vendar pa to velja samo za $n$ manjši od 35, za višje $n$ pa se
+število ovojnic Cantorjeve mreže obnaša bolj kompleksno in na nekaterih mestih celo pada z večanjem $n$
 
 \begin{figure}[!h]
 	\centering
-	\caption{Število ovojnic različnih $n \times n$ mrež v odvisnosti od $n$ (ni še prava slika)}
+	\caption{Število ovojnic različnih $n \times n$ mrež v odvisnosti od $n$}
 	\label{fig:st_ovojnic}
 	%\vspace{2mm}
-	\includegraphics[scale=0.6]{slike/st_ovojnic.jpg}
+	\includegraphics[scale=0.7]{slike/st_ovojnic.jpg}
 \end{figure}
 
-\newpage
 Za $m \times n$ mreže v literaturi ni omenjene časovne zahtevnosti, zato sva jo poiskušala določiti sama. Število ovojnic je tu odvisno od dveh parametrov, $m$ in $n$, zato je ta graf 
 tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 
@@ -272,13 +272,13 @@ tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 	\caption{Število ovojnic $m \times n$ mreže v odvisnosti od $m$ in $n$}
 	\label{fig:3d}
 	%\vspace{2mm}
-	\includegraphics[scale=0.6]{slike/mxn_3d.png}
+	\includegraphics[scale=0.7]{slike/mxn_3d.png}
 \end{figure}
 
 \section{Rezultati}
 Kot že rečeno se za navadne $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma na
 je v tem primeru torej $\mathcal{O}(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
-$\mathcal{O}(?)$, za Cantorjeve mreže pa $\mathcal{O}(?)$.
+$\mathcal{O}(n)$, za Cantorjeve mreže pa $\mathcal{O}(n^2)$ (za $n \leq 35$).
 Za mreže velikosti $m \times n$ v literaturi ni bilo podatka o časovni zahtevnosti, zato sva jo določila eksperimentalno. Ugotovila sva, da je za take mreže časovna zahtevnost algoritma 
 $\mathcal{O}(?)$. 
 
