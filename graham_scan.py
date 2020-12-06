@@ -1,4 +1,4 @@
-from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno
+from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno, kvazi_cantor_mreza
 import time
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -48,3 +48,17 @@ def grid_peel_graham_potencna(m, n):
 
 def tabela_graham_enakomerna(m,n):
     return [grid_peel_graham_enakomerna(i,j)[2] for i in range(m) for j in range(n)]
+
+def grid_peel_graham_cantor(n):
+    start = time.time()
+    mreza = kvazi_cantor_mreza(n)
+    ovojnice = {}
+    i = 0
+    while mreza or len(mreza) > 1:
+        ch = graham_scan(mreza)
+        nova = [x for x in mreza if x not in ch]
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    casovna_zahtevnost = time.time() - start 
+    return i, ovojnice, casovna_zahtevnost

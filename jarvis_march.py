@@ -1,4 +1,4 @@
-from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno
+from razredi import Tocka, naredi_neenakomerno, smer_razlike, naredi_potencno, kvazi_cantor_mreza
 import time
 
 def jarvis_march(seznam):
@@ -10,8 +10,7 @@ def jarvis_march(seznam):
     while (True):
 
         q = (l + 1) % len(seznam)      
-        print(q)
-        
+
         for i in range(len(seznam)):
             if i == l:
                 continue  
@@ -24,7 +23,7 @@ def jarvis_march(seznam):
         rezultat.append(seznam[q])
     return rezultat
 
-def grid_peel_jarvis_enakomerna(m, n):
+def grid_peel_jarvis_enakomerna(m,n):
     start = time.time()
     mreza = [Tocka(i,j) for i in range(m) for j in range(n)]
     ovojnice = {}
@@ -38,7 +37,7 @@ def grid_peel_jarvis_enakomerna(m, n):
     casovna_zahtevnost = time.time() - start
     return i, ovojnice, casovna_zahtevnost
 
-def grid_peel_jarvis_potencna(m, n):
+def grid_peel_jarvis_potencna(m,n):
     start = time.time()
     mreza = naredi_potencno(m, n)
     ovojnice = {}
@@ -51,4 +50,17 @@ def grid_peel_jarvis_potencna(m, n):
         i += 1
     casovna_zahtevnost = time.time() - start        
     return i, ovojnice, casovna_zahtevnost
-grid_peel_jarvis_enakomerna(5,5)
+
+def grid_peel_jarvis_cantor(n):
+    start = time.time()
+    mreza = kvazi_cantor_mreza(n)
+    ovojnice = {}
+    i = 0
+    while mreza or len(mreza)>1:
+        ch = jarvis_march(mreza)
+        nova = [x for x in mreza if x not in ch]
+        mreza = nova
+        ovojnice[i] = ch
+        i += 1
+    casovna_zahtevnost = time.time() - start        
+    return i, ovojnice, casovna_zahtevnost
