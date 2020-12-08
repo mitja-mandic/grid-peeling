@@ -14,7 +14,7 @@ def jarvis_march(seznam):
         for i in range(len(seznam)):
             if i == l:
                 continue
-            #Na vsakem koraku preverimo, če "zavijamo v levo. Če so točke kolinearne, vzamemo tisto, ki je najdlje stran."
+            #Na vsakem koraku preverimo, če "zavijamo v levo". Če so točke kolinearne, vzamemo tisto, ki je najdlje stran.
             d = smer_razlike(seznam[l], seznam[i], seznam[q])
             if d > 0 or (d == 0 and seznam[i].razdalja(seznam[l]) > seznam[q].razdalja(seznam[l])):
                 q = i

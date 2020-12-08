@@ -1,5 +1,3 @@
-import random
-
 class Tocka:
     def __init__(self, x, y):
         self.x = x
