@@ -34,14 +34,23 @@ class Tocka:
 def smer_razlike(p,q,r):
     return p.razlika(q).vektorski_produkt(r.razlika(q))
 
-def naredi_neenakomerno(st_tock, zgornja_meja):
-    seznam = sorted(random.sample(range(zgornja_meja),st_tock))
-    return [Tocka(i,j) for i in seznam for j in seznam]
+
+def enakomerna_mreza(m,n):
+    """Vrne mxn mrežo z enakomernimi razmiki
+    """
+    return [Tocka(i,j) for i in range(m) for j in range(n)]
 
 def naredi_potencno(m, n):
+    """Mreža mxn, kjer se razmiki povečujejo eksponentno z osnovo 2.
+    """
     return [Tocka(2**i,2**j) for i in range(m) for j in range(n)]
 
 def kvazi_cantor_mreza(n):
+    """Mreža po vzoru literature. Vsaka naslednja ovojnica je dolžine 3 ** i, argument je največja potenca 3.
+    (vsaka stranica je točno trikrat daljša od prejšnje, zato Cantorjeva).
+    Na vsaki stranici imamo na koncu 2n točk, vseh vozlišč je torej 4 n ** 2.
+    """
+    
     sez = [0,3]
     for i in range(1,n):
         nasl_dol = sez[0] - 3 ** i
