@@ -109,7 +109,8 @@ def kvazi_cantor_mreza(n):
 
 Zgornje funkcije bova uporabila v dveh različnih algoritmih za iskanje konveksnih ovojnic, in sicer v Jarvisovem obhodu in Grahamovemu pregledu.
 Oba algoritma sprejmeta seznam točk in mu priredita konveksno ovojnico, a to storita na drugačen način.
-Seznam točk ustvarijo zadnje tri funkcije zgoraj, pri čemer prva sestavi enakomerno mrežo točk $(i, j)$, druga ustvari mrežo točk oblike $(2^i, 2^j)$, tretja pa točke oblike $kantor$
+Seznam točk ustvarijo zadnje tri funkcije zgoraj, pri čemer prva sestavi enakomerno mrežo točk $(i, j)$, druga ustvari mrežo točk oblike $(2^i, 2^j)$, tretja pa oblikuje mrežo, ki
+jo začnemo graditi na sredini in ima na $i$-tem koraku dolžino vsake od stranic $3^i$, v množico pa na vsakem koraku dodamo kotne točke te mreže.
 
 \newpage
 \subsection{Jarvisov obhod}
