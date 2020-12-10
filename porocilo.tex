@@ -253,11 +253,11 @@ večjo učinkovitost Grahamovega pregleda.
 	\includegraphics[scale=0.6]{slike/cas.jpg}
 \end{figure}
 
-Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $\mathcal{O}(n ^ \frac{4}{3}),$~kar pomeni, da je število konveksnih ovojnic na $n \times n$~mreži $\Theta(n ^ \frac{4}{3})$.
+Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $O(n ^ \frac{4}{3}),$~kar pomeni, da je število konveksnih ovojnic na $n \times n$~mreži $\Theta(n ^ \frac{4}{3})$.
 Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n,$~kjer za $n$ vzamemo naravna števila od $1$ do $35$ in mreže različnih vrst. 
 Opazimo, da se razmerju med številom ovojnic in velikostjo navadne mreže najbolj prilega funkcija $1,5 \cdot n ^ \frac{4}{3}.$ Eksperimentalni rezultat se torej ujema s tistim, navedenim v 
 literaturi. Za potenčne $n \times n$ mreže je najboljša funkcija, ki prikaže razmerje med številom konveksnih ovojnic in velikostjo mreže, $2,3 \cdot n$, torej je časovna zahtevnost algoritma
-v tem primeru $\mathcal{O}(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo časovno zahtevnost $\mathcal{O}(n^2)$, vendar pa to velja samo za $n$ manjši od 35, za višje $n$ pa se
+v tem primeru $O(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo časovno zahtevnost $O(n^2)$, vendar pa to velja samo za $n$ manjši od 35, za višje $n$ pa se
 število ovojnic Cantorjeve mreže obnaša precej nenavadno, česar pa nisva znala pojasniti. Ugibava, da gre za težave pri računanju zelo velikih števil (velikosti ranga $3^{40} \approx 10^{20}$).
 
 \begin{figure}[!h]
@@ -273,19 +273,35 @@ tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 
 \begin{figure}[!h]
 	\centering
-	\caption{Število ovojnic $m \times n$ mreže v odvisnosti od $m$ in $n$}
+	\caption{Število ovojnic $50 \times 50$ mreže v odvisnosti od $m$ in $n$}
 	\label{fig:3d}
 	%\vspace{2mm}
 	\includegraphics[scale=0.4]{slike/mxn_3d.jpg}
 \end{figure}
 
 \newpage
+Na zgornji sliki vidimo graf števila ovojnic mreže velikosti $50 \times 50$ v odvisnosti od $m$ in $n$. Rezultatom sva s pomočjo aproksimacijskega algoritma narisala ploskev, ki se najbolje
+prilega rezultatom. Ta algoritem je sprejel podatke o številu ovojnic pri posameznih parih $(m, n)$ in narisal te točke ter ploskev oblike $a(m^b + n^c)$, ki se jim najbolje prilega.
+Poleg tega je vrnil še pripadajoče parametre $a, b$ in $c$ te ploskve, iz katerih sva ocenila, da je časovna zahtevnost lupljenja konveksnih ovojnic na $m \times n$ mreži 
+$O((mn)^{\frac{2}{3}})$. Aproksimacijski algoritem, ki sva ga uporabila, je podrobneje predstavljen na spletni strani \cite{aproksimacija}.
+
+\newpage
 \section{Rezultati}
-Kot že rečeno, se za enakomerne $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma na
-je v tem primeru torej $\mathcal{O}(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
-$\mathcal{O}(n)$, za Cantorjeve mreže pa $\mathcal{O}(n^2)$ (za $n \leq 35$), kar se ravno tako ujema z literaturo.
+Kot že rečeno, se za enakomerne $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma
+je v tem primeru torej $O(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
+$O(n)$, za Cantorjeve mreže pa $O(n^2)$ (za $n \leq 35$), kar se ravno tako ujema z literaturo.
 Za mreže velikosti $m \times n$ v literaturi ni bilo podatka o časovni zahtevnosti, zato sva jo določila eksperimentalno. Profesor Cabello je predvideval,
 da se bo mreža obnašala podobno kot $min\{m,n\}\times min\{m,n\}$, eksperimentalno
-pa sva ocenila, da je za take mreže časovna zahtevnost algoritma $\mathcal{O}((mn)^{\frac{2}{3}})$. 
+pa sva ocenila, da je za take mreže časovna zahtevnost algoritma $O((mn)^{\frac{2}{3}})$. 
+
+\begin{thebibliography}{3}
+    \bibitem{dolg}
+    David Eppstein, Sariel Har-Peled, Gabriel Nivasch. \textit{Grid Peeling and the Affine Curve-Shortening Flow}.
+    \bibitem{kratek}
+    Sariel Har-Peled, Bernard Lidický. \textit{Peeling the Grid}. 2012.
+    \bibitem{aproksimacija}
+    Fitting 3d Data, \\\href{https://stackoverflow.com/questions/53506257/fitting-3d-data?noredirect=1&lq=1}
+    {\texttt{https://stackoverflow.com/questions/53506257/fitting-3d-data?noredirect=1\&lq=1}}
+\end{thebibliography}
 
 \end{document}
