@@ -142,12 +142,18 @@ def jarvis_march(seznam):
     return rezultat
 \end{lstlisting}
 
-Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Potem ustvari prazen seznam, v katerega postopoma dodaja točke, ki jih obišče. Vanj najprej doda začetno točko,
-nato izberemo poljubno točko (8. vrstica kode - tu je q točka izbrana tako, da je zagotovo v seznamu, lahko bi izbrali katerokoli razen začetne), 
-in glede na ti točki poišče največji levi ovinek (torej največji kot)
-in gre v tisto točko, za katero je tak kot najden 
-(v primeru kolinearnosti, gre v točko, ki je od trenutne točke najdlje). Točko doda v seznam 
-in jo nastavi za trenutno točko. To je del kode od 7. do 15. vrstice. Ko spet pride v začetno točko, se algoritem ustavi.
+Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Potem ustvari prazen seznam, v katerega postopoma dodaja točke, ki jih obišče. 
+
+Vanj najprej doda začetno točko, označimo jo z $l$, nato izberemo poljubno točko, ki jo označimo s $q$ (8. vrstica kode - tu je q točka izbrana tako, da je zagotovo v seznamu, 
+lahko bi izbrali katerokoli razen začetne). Potem se začne iteracija, točke v iteraciji označimo z $i$. Če kot $(l,i,q)$ predstavlja ovinek v desno, $q$ in $i$ zamenjamo,
+če je ta kot ovinek v levo nadaljujemo brez sprememb, če pa so točke $p,q\text{ter~}i$ kolinearne, izmed $q \text{in}i$ izberemo tisto, ki ima večjo $x$ koordinato
+(je dlje od začetne točke). Ko tako pridemo do konca in pregledamo vse točke, smo konveksno ovojnico našli in jo algoritem vrne kot seznam točk. 
+
+Opisan postopek se v zgornji kodi odvije od 7. do 15. vrstice. Funkcija \texttt{ smer\textunderscore razlike } izračuna kot med vektorji 
+(oziroma natančneje, izračuna vektorski produkt vektorjev $(l - i)\times(q - i)$). Če je ta vrednost pozitivna (imamo ovinek v desno) oziroma 0 in je $i$ dlje od začetne točke kot $q$, zamenjamo $q$ in $i$. 
+
+Na koncu preverimo, če smo prišli nazaj v začetno točko $l.$ V tem primeru algoritem ustavimo, ali pa postopek ponovimo z novo začetno točko. To je tista, ki smo jo
+v prejšnji ponovitvi zanke dodali v ovojnico.
 
 \newpage
 \subsection{Grahamov pregled}
@@ -169,11 +175,19 @@ def graham_scan(seznam):
     return ovojnica
 \end{lstlisting}
 
-Najprej definiramo funkcijo, ki seznam uredi po naraščajočem kotu med točkama, glede na $x$-os. Algoritem najprej točke iz seznama točk uredi po kotu in ustvari prazen seznam (kopico), 
-v katerega bo dodajal točke, ki so v konveksni ovojnici. Če je v ovojnici več kot ena točka, vzame zadnji dve točki v ovojnici in prvo iz urejenega seznama ter preveri kot med njimi.
-Če zavije v desno (vektorski produkt vektorjev, ki imajo začetek v zadnji točki ovojnice in konec v predzadnji točki ovojnice oz. prvi točki seznama je nenegativen), točko izloči, 
-sicer pa jo doda v ovojnico. Ko pregleda vse urejene točke, se ustavi. V kodi je ta postopek napisan od 8. do 11. vrstice. Algoritem je hitrejši od Jarvisovega obhoda, ker delamo z že urejenimi
-točkami in nam zato ni treba na vsakem koraku pregledati vseh točk.
+Najprej definiramo funkcijo, ki seznam uredi po naraščajočem kotu med točkama, glede na $x$-os. Za urejanje uporabimo kar vgrajeno Pythonovo funkcijo \texttt{sorted},
+ki bazira na \textit{timsort} algoritmu, ki ima časovno zahtevnost $O(n \log n).$ Dodali smo le še funkcijo, ki računa kot med dvema točkama, kar pa se zgodi v linearnem času.
+
+Algoritem najprej točke uredi po kotu in ustvari prazen seznam (kopico), 
+v katerega bo dodajal točke, ki so v konveksni ovojnici.
+
+Najprej v kopico dodamo prvi dve točki iz urejenega seznama, ti bosta zagotovo tudi v konveksni ovojnici.
+Če je v kopici več kot ena točka, vzame zadnji dve točki v ovojnici in prvo iz urejenega seznama ter preveri kot med njimi. Če torej označimo zadnji dve točki iz kopice z $x$ in $y$ ter točko,
+ki je prva v seznamu z $i$, izračunamo vektorski produkt $(x-y)\times(i-y)$. 
+Če je pozitiven (kot z vrhom v $y$ in krakoma skozi $x$ ter $i$ predstavlja ovinek v desno), točko izloči, 
+sicer pa jo doda na vrh kopice (v našem primeru na konec seznama). Ko pregleda vse urejene točke, se ustavi. 
+V zanki moramo le enkrat pregledati vse točke, in ker se vse zgoraj opisano računanje izvaja v linearnem času, je zahtevnost tega dela $O(n)$ (kar pa je manj od zahtevnosti urejanja,
+torej je to zgornja meja za zahtevnost algoritma).
 
 \section{Algoritem za lupljenje konveksnih ovojnic}
 S pomočjo zgornjih algoritmov sedaj lahko izpeljemo algoritem za lupljenje konveksnih ovojnic. Glede na vrsto iskanja konveksnih ovojnic, torej po Jarvisovem ali 
@@ -239,6 +253,7 @@ Na sliki \ref{fig:5x5} je prikazan postopek na potenčni mreži velikosti $5 \ti
 	\includegraphics[scale=0.8]{slike/kvazi_cantor.jpg}
 \end{figure}
 \pagebreak
+
 \subsection{Časovna zahtevnost algoritma}
 Najprej bova prikazala časovno primerjavo med Jarvisovim obhodom in Grahamovim pregledom. Glede na izbrani algoritem za iskanje konveksnih ovojnic se čas izvajanja algoritma za lupljenje
 lahko zelo razlikuje, kar je jasno razvidno iz slike \ref{fig:cas}. Tu sva prikazala samo primer $n \times n$~mreže, vendar pa je za $m \times n$~mreže rezultat podoben. Absolutni
