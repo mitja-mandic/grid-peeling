@@ -287,11 +287,11 @@ tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 	\caption{Število ovojnic $50 \times 50$ mreže v odvisnosti od $m$ in $n$}
 	\label{fig:3d}
 	\vspace{2mm}
-	\includegraphics[scale=0.5]{slike/mxn_3d.jpg}
+	\includegraphics[scale=0.4]{slike/mxn_3d.jpg}
 \end{figure}
 
 Na zgornji sliki vidimo graf števila ovojnic mreže velikosti $50 \times 50$ v odvisnosti od $m$ in $n$. Rezultatom sva s pomočjo aproksimacijskega algoritma narisala ploskev, ki se najbolje
-prilega rezultatom. Ta algoritem je sprejel podatke o številu ovojnic pri posameznih parih $(m, n)$ in narisal te točke ter ploskev oblike $a(m^b + n^c)$, ki se jim najbolje prilega.
+prilega rezultatom. Ta algoritem je sprejel podatke o številu ovojnic pri posameznih parih $(m, n)$ in narisal te točke ter ploskev oblike $a(m^b \cdot n^c)$, ki se jim najbolje prilega.
 Poleg tega je vrnil še pripadajoče parametre $a, b$ in $c$ te ploskve, iz katerih sva ocenila, da je časovna zahtevnost lupljenja konveksnih ovojnic na $m \times n$ mreži 
 $O((mn)^{\frac{2}{3}})$. Aproksimacijski algoritem, ki sva ga uporabila, je podrobneje predstavljen na spletni strani \cite{aproksimacija}.
 
