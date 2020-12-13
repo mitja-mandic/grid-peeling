@@ -142,9 +142,9 @@ def jarvis_march(seznam):
 
 Algoritem najprej poišče najbolj levo točko (2. vrstica kode). Potem ustvari prazen seznam, v katerega postopoma dodaja točke, ki jih obišče. 
 
-Vanj najprej doda začetno točko, označimo jo z $l$, nato izberemo poljubno točko, ki jo označimo s $q$ (8. vrstica kode - tu je q točka izbrana tako, da je zagotovo v seznamu, 
+Vanj najprej doda začetno točko, označimo jo z $l$, nato izberemo poljubno točko, ki jo označimo s $q$ (8. vrstica kode - tu je $q$ točka izbrana tako, da je zagotovo v seznamu, 
 lahko bi izbrali katerokoli razen začetne). Potem se začne iteracija, točke v iteraciji označimo z $i$. Če kot $(l,i,q)$ predstavlja ovinek v desno, $q$ in $i$ zamenjamo,
-če je ta kot ovinek v levo nadaljujemo brez sprememb, če pa so točke $p,q\text{ter~}i$ kolinearne, izmed $q \text{in}i$ izberemo tisto, ki ima večjo $x$ koordinato
+če je ta kot ovinek v levo nadaljujemo brez sprememb, če pa so točke $p,q$ ter $i$ kolinearne, izmed $q$ in $i$ izberemo tisto, ki ima večjo $x$ koordinato
 (je dlje od začetne točke). Ko tako pridemo do konca in pregledamo vse točke, smo konveksno ovojnico našli in jo algoritem vrne kot seznam točk. 
 
 Opisan postopek se v zgornji kodi odvije od 7. do 15. vrstice. Funkcija \texttt{ smer\textunderscore razlike } izračuna kot med vektorji 
@@ -213,7 +213,7 @@ potreben čas za izvedbo algoritma. S pomočjo množice konveksnih ovojnic lahko
 
 \subsection{Prikaz rezultatov na primerih}
 Za boljšo predstavo, kako algoritem deluje, sva postopek lupljenja konveksnih ovojnic prikazala na nekaj primerih. Prvi, ki je prikazan na sliki \ref{fig:11x11}, je postopek lupljenja 
-navadne mreže velikosti $11 \times 11,$~drugi, prikazan na sliki \ref{fig:15x10}, pa je psotopek lupljenja navadne mreže velikosti $15 \times 10$. 
+navadne mreže velikosti $11 \times 11,$~drugi, prikazan na sliki \ref{fig:15x10}, pa je postopek lupljenja navadne mreže velikosti $15 \times 10$. 
 
 \begin{figure}[!h]
 	\centering
@@ -253,7 +253,7 @@ Na sliki \ref{fig:5x5} je prikazan postopek na potenčni mreži velikosti $5 \ti
 \subsection{Časovna zahtevnost algoritma}
 Najprej bova prikazala časovno primerjavo med Jarvisovim obhodom in Grahamovim pregledom. Glede na izbrani algoritem za iskanje konveksnih ovojnic se čas izvajanja algoritma za lupljenje
 lahko zelo razlikuje, kar je jasno razvidno iz slike \ref{fig:cas}. Tu sva prikazala samo primer $n \times n$~mreže, vendar pa je za $m \times n$~mreže rezultat podoben. Absolutni
-čas izvajanja algoritma je seveda odvisen od številnih dejavnikov (zmogljivost računalnika, koliko procesov se izvaja v ozadju, \ldots), vendar se jasno vidi
+čas izvajanja algoritma je seveda odvisen od številnih dejavnikov (zmogljivost računalnika, koliko procesov se izvaja v ozadju,...), vendar se jasno vidi
 večjo učinkovitost Grahamovega pregleda.
 
 \begin{figure}[!h]
@@ -264,7 +264,7 @@ večjo učinkovitost Grahamovega pregleda.
 	\includegraphics[scale=0.6]{slike/cas.jpg}
 \end{figure}
 
-Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $O(n ^ \frac{4}{3}),$~kar pomeni, da je število konveksnih ovojnic na $n \times n$~mreži $\Theta(n ^ \frac{4}{3})$.
+Kot že omenjeno, je v literaturi omenjena časovna zahtevnost $O(n ^ \frac{4}{3}),$~kar pomeni, da je število konveksnih ovojnic na $n \times n$~mreži $\theta(n ^ \frac{4}{3})$.
 Na sliki \ref{fig:st_ovojnic} je predstavljeno število ovojnic izvedenega algoritma v odvisnosti od $n,$~kjer za $n$ vzamemo naravna števila od $1$ do $35$ in mreže različnih vrst. 
 Opazimo, da se razmerju med številom ovojnic in velikostjo navadne mreže najbolj prilega funkcija $1,5 \cdot n ^ \frac{4}{3}.$ Eksperimentalni rezultat se torej ujema s tistim, navedenim v 
 literaturi. Za potenčne $n \times n$ mreže je najboljša funkcija, ki prikaže razmerje med številom konveksnih ovojnic in velikostjo mreže, $2,3 \cdot n$, torej je časovna zahtevnost algoritma
@@ -300,7 +300,7 @@ Kot že rečeno, se za enakomerne $n \times n$ mreže, za katere je bila v liter
 je v tem primeru torej $O(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
 $O(n)$, za Cantorjeve mreže pa $O(n^2)$ (za $n \leq 35$), kar se ravno tako ujema z literaturo.
 Za mreže velikosti $m \times n$ v literaturi ni bilo podatka o časovni zahtevnosti, zato sva jo določila eksperimentalno. Profesor Cabello je predvideval,
-da se bo mreža obnašala podobno kot $min\{m,n\}\times min\{m,n\}$, eksperimentalno
+da se bo mreža obnašala podobno kot $\min\{m, n\} \times \min\{m,n\}$, eksperimentalno
 pa sva ocenila, da je za take mreže časovna zahtevnost algoritma $O((mn)^{\frac{2}{3}})$. Več podatkov o vizualizaciji in risanju slik, pa je v datoteki \texttt{vizualizacija.ipynb}.
 
 \begin{thebibliography}{3}
