@@ -57,7 +57,6 @@ Za $m \times n$ mrežo v literaturi ni navedenih podatkov, zanimala pa naju bo m
 Po izvedenem eksperimentalnem delu, bova rezultate analizirala in jih primerjala z rezultati iz literature. Zanimalo naju bo, kako drugačno je število ovojnic na $m \times n$
 mreži v primerjavi s simetrično.
 
-\newpage
 \section{Orodja in algoritmi}
 Za uporabo algoritmov v Pythonu sva najprej definirala razred Točka, v katerem sva skonstruirala vsa potrebna orodja in funkcije za uporabo algoritmov za iskanje konveksnih ovojnic.
 
@@ -113,7 +112,6 @@ Seznam točk ustvarijo zadnje tri funkcije zgoraj, pri čemer prva sestavi enako
 jo začnemo graditi na sredini in ima na $i$-tem koraku dolžino vsake od stranic $3^i,$~v množico pa na vsakem koraku dodamo kotne točke te mreže. Ker je vsaka prejšnja stranica
 ravno srednja tretjina naslednje, sva mrežo poimenovala ,,kvazi-Cantorjeva mreža.''
 
-\newpage
 \subsection{Jarvisov obhod}
 Jarvisov obhod (angl. \textit{Jarvis March}) ali algoritem zavijanja darila je postopek, ki dani množici točk poišče konveksno ovojnico v eni ali več dimenzijah (osredotočili se 
 bomo na dve dimenziji). Algoritem se imenuje po R.A. Jarvisu, ki ga je objavil leta 1973. Časovna zahtevnost algoritma je $O(nh),$~kjer $n$~predstavlja število vseh točk, $h$~pa 
@@ -155,7 +153,6 @@ Opisan postopek se v zgornji kodi odvije od 7. do 15. vrstice. Funkcija \texttt{
 Na koncu preverimo, če smo prišli nazaj v začetno točko $l.$ V tem primeru algoritem ustavimo, ali pa postopek ponovimo z novo začetno točko. To je tista, ki smo jo
 v prejšnji ponovitvi zanke dodali v ovojnico.
 
-\newpage
 \subsection{Grahamov pregled}
 Alternativa prejšnjemu algoritmu je tako imenovani Grahamov pregled (angl. \textit{Graham's scan}). Algoritem se imenuje po Ronaldu Grahamu, ki ga je objavil leta 1972. 
 V primerjavi z Jarvisovim obhodom je Grahamov pregled hitrejši, saj ima časovno zahtevnost $O(n \log n)$.
@@ -222,7 +219,7 @@ navadne mreže velikosti $11 \times 11,$~drugi, prikazan na sliki \ref{fig:15x10
 	\centering
 	\caption{Postopek lupljenja ovojnic enakomerne $11 \times 11$ mreže}
 	\label{fig:11x11}
-	%\vspace{2mm}
+	\vspace{2mm}
 	\includegraphics[scale=0.6]{slike/11x11_enakomerna.png}
 \end{figure}
 
@@ -230,7 +227,7 @@ navadne mreže velikosti $11 \times 11,$~drugi, prikazan na sliki \ref{fig:15x10
 	\centering
 	\caption{Postopek lupljenja ovojnic enakomerne $15 \times 10$ mreže}
 	\label{fig:15x10}
-	%\vspace{2mm}
+	\vspace{2mm}
 	\includegraphics[scale=0.6]{slike/15x10_enakomerna.jpg}
 \end{figure}
 
@@ -241,18 +238,17 @@ Na sliki \ref{fig:5x5} je prikazan postopek na potenčni mreži velikosti $5 \ti
 	\centering
 	\caption{Postopek lupljenja ovojnic potenčne $5 \times 5$ mreže}
 	\label{fig:5x5}
-	%\vspace{2mm}
-	\includegraphics[scale=0.8]{slike/5x5_potencna.png}
+	\vspace{2mm}
+	\includegraphics[scale=0.6]{slike/5x5_potencna.png}
 \end{figure}
 
 \begin{figure}[!h]
 	\centering
 	\caption{Postopek lupljenja ovojnic Cantorjeve $8 \times 8$~mreže}
 	\label{fig:cantor}
-	%\vspace{2mm}
-	\includegraphics[scale=0.8]{slike/kvazi_cantor.jpg}
+	\vspace{2mm}
+	\includegraphics[scale=0.6]{slike/kvazi_cantor.jpg}
 \end{figure}
-\pagebreak
 
 \subsection{Časovna zahtevnost algoritma}
 Najprej bova prikazala časovno primerjavo med Jarvisovim obhodom in Grahamovim pregledom. Glede na izbrani algoritem za iskanje konveksnih ovojnic se čas izvajanja algoritma za lupljenje
@@ -264,7 +260,7 @@ večjo učinkovitost Grahamovega pregleda.
 	\centering
 	\caption{Čas izvedbe algoritma lupljenja konveksnih ovojnic $n \times n$ mreže v odvisnosti od $n$}
 	\label{fig:cas}
-	%\vspace{2mm}
+	\vspace{2mm}
 	\includegraphics[scale=0.6]{slike/cas.jpg}
 \end{figure}
 
@@ -279,7 +275,7 @@ v tem primeru $O(n)$. Na enak način za Cantorjevo $n \times n$ mrežo dobimo č
 	\centering
 	\caption{Število ovojnic različnih $n \times n$ mrež v odvisnosti od $n$}
 	\label{fig:st_ovojnic}
-	%\vspace{2mm}
+	\vspace{2mm}
 	\includegraphics[scale=0.6]{slike/st_ovojnic.jpg}
 \end{figure}
 
@@ -290,17 +286,15 @@ tridimenzionalen. Rezultate lahko vidimo na sliki \ref{fig:3d}.
 	\centering
 	\caption{Število ovojnic $50 \times 50$ mreže v odvisnosti od $m$ in $n$}
 	\label{fig:3d}
-	%\vspace{2mm}
-	\includegraphics[scale=0.4]{slike/mxn_3d.jpg}
+	\vspace{2mm}
+	\includegraphics[scale=0.5]{slike/mxn_3d.jpg}
 \end{figure}
 
-\newpage
 Na zgornji sliki vidimo graf števila ovojnic mreže velikosti $50 \times 50$ v odvisnosti od $m$ in $n$. Rezultatom sva s pomočjo aproksimacijskega algoritma narisala ploskev, ki se najbolje
 prilega rezultatom. Ta algoritem je sprejel podatke o številu ovojnic pri posameznih parih $(m, n)$ in narisal te točke ter ploskev oblike $a(m^b + n^c)$, ki se jim najbolje prilega.
 Poleg tega je vrnil še pripadajoče parametre $a, b$ in $c$ te ploskve, iz katerih sva ocenila, da je časovna zahtevnost lupljenja konveksnih ovojnic na $m \times n$ mreži 
 $O((mn)^{\frac{2}{3}})$. Aproksimacijski algoritem, ki sva ga uporabila, je podrobneje predstavljen na spletni strani \cite{aproksimacija}.
 
-\newpage
 \section{Rezultati}
 Kot že rečeno, se za enakomerne $n \times n$ mreže, za katere je bila v literaturi podana časovna zahtevnost, teoretični in eksperimentalni podatki ujemajo. Časovna zahtevnost izvedbe algoritma
 je v tem primeru torej $O(n ^ \frac{4}{3})$. Za potenčne mreže velikosti $n \times n$, tj. množice točk oblike $(2^i, 2^i), 0 \leq i \leq n - 1$, je časovna zahtevnost enaka
