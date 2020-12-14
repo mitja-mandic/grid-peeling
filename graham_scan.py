@@ -15,9 +15,9 @@ def graham_scan(seznam):
     ovojnica = [] #stack v katerega dodajamo točke
 
     for tocka in urejene_tocke:
-        """če je v ovojnici več kot ena točka, vzamemo zadnji dve točki v ovojnici in prvo iz urejenega seznama. Preverimo kot med njimi.
-        Če zavijamo v desno (vektorski produkt vektorjev, ki imajo začetek v zadnji točki ovojnice in konec v predzadnji točki ovojnice oz. prvi točki seznama je nenegativen)
-        točko izločimo. Sicer jo dodamo v ovojnico. Ko pregledamo vse urejene točke, smo zaključili.
+        """Če je v ovojnici več kot ena točka, vzamemo zadnji dve točki v ovojnici in prvo iz urejenega seznama. Preverimo kot med njimi.
+        Če zavijamo v desno glede na kontra smer urinega kazalca - ccw (vektorski produkt vektorjev, ki imajo začetek v zadnji točki ovojnice in konec v predzadnji 
+        točki ovojnice oz. prvi točki seznama je nenegativen) točko izločimo. Sicer jo dodamo v ovojnico. Ko pregledamo vse urejene točke, smo zaključili.
         """
         while len(ovojnica) > 1 and smer_razlike(ovojnica[-2], ovojnica[-1], tocka) >= 0:           
             ovojnica.pop()

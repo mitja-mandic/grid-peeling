@@ -2,12 +2,19 @@ from razredi import Tocka, enakomerna_mreza, smer_razlike, naredi_potencno, kvaz
 import time
 
 def jarvis_march(seznam):
-    """Najde konveksno ovojnico danega seznama (seznam objektov razreda točka) in vrne njegovo konveksno ovojnico"""
+    """Najde konveksno ovojnico danega seznama (seznam objektov razreda točka) in vrne njegovo konveksno ovojnico.
+    """
     zacetna_tocka =  min(seznam, key = lambda tocka: tocka.x) #poiščemo najbolj levo točko
     indeks = seznam.index(zacetna_tocka) 
     l = indeks
     rezultat = []
     rezultat.append(zacetna_tocka)
+    """
+    Najprej poiščemo najbolj levo točko v seznamu, označimo jo z l, nato vzamemo načeloma poljubno točko q. Potem iteriramo in gledamo kot (l,i,q). Če
+    ta kot predstavlja ovinek v desno (mi pa se premikamo v ccw smeri - proti urinemu kazalcu), točki i in q zamenjamo in nadaljujemo postopek. Če so vse tri
+    točke kolinearne, vzamemo izmed i in q tisto, ki je dlje od začetne točke l. Če je na koncu l=q smo zaključili, sicer pa nadaljujemo  z iteracijo.
+    """
+
     while (True):
         #S tako izbiro q nikoli nimamo težav z indeksiranjem - celoštevilsko deljenje nam zagotavlja da ostanemo v rangu velikosti seznama.
         q = (l + 1) % len(seznam)      
@@ -37,6 +44,3 @@ def grid_peel_jarvis(mreza):
         i += 1
     casovna_zahtevnost = time.time() - start
     return i, ovojnice, casovna_zahtevnost
-
-print(6 % 5)
-

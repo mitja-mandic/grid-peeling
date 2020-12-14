@@ -1,26 +1,34 @@
+import math
+
 class Tocka:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
     def kot_med_dvema(self, other):
+        """Kot med dvema točkama v radianih"""        
         if self.x != other.x:
-            return (self.y - other.y) / (self.x - other.x)
+            return math.atan((self.y - other.y) / (self.x - other.x))
         else:
-            return 90
+            return math.pi/2
     
     #če je vektorski produkt pozitiven je kot med vektorjema manjši od Pi
     #če je negativen je manjši od pi
     #če je 0 sta vektorja kolinearna
 
     def vektorski_produkt(self, other): 
+        """Vektorski produkt, kjer je tretja komponenta obeh vektorjev enaka nič (smo v ravnini)"""
         return self.x * other.y - self.y * other.x
 
     def razlika(self, other):
-    	return Tocka(self.x - other.x, self.y - other.y)
+        """Razlika dveh točk"""
+        return Tocka(self.x - other.x, self.y - other.y)
 
     def razdalja(self, other):
+        """Kvadrat klasične razdalje med točkama"""
         return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
+    def kot_atan(self, other):
+        return math.atan2(self.y-other.y,self.x-other.x)
 
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'

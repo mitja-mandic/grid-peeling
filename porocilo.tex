@@ -58,6 +58,9 @@ Po izvedenem eksperimentalnem delu, bova rezultate analizirala in jih primerjala
 mreži v primerjavi s simetrično.
 
 \section{Orodja in algoritmi}
+Algoritma sta v datotekah \texttt{jarvis\_march.py} ter \texttt{graham\_scan.py}, oba pa za delovanje uvozita datoteko \texttt{razredi.py}, kjer je definiran spodaj opisan
+razred točka in funkcije, ki generirajo mreže. Vizualizacijo sva izvedla v Jupyter Notebook datoteki \texttt{vizualizacija.ipynb}.
+
 Za uporabo algoritmov v Pythonu sva najprej definirala razred Točka, v katerem sva skonstruirala vsa potrebna orodja in funkcije za uporabo algoritmov za iskanje konveksnih ovojnic.
 
 \begin{lstlisting}
@@ -68,9 +71,9 @@ class Tocka:
 
     def kot_med_dvema(self, other):
         if self.x != other.x:
-            return (self.y - other.y) / (self.x - other.x)
+            return math.atan((self.y - other.y) / (self.x - other.x))
         else:
-            return 90
+            return math.pi/2
 
     def vektorski_produkt(self, other): 
         return self.x * other.y - self.y * other.x
