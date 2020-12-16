@@ -178,14 +178,14 @@ def graham_scan(seznam):
 Najprej definiramo funkcijo, ki seznam uredi po naraščajočem kotu med točkama, glede na $x$-os. Za urejanje uporabimo kar vgrajeno Pythonovo funkcijo \texttt{sorted},
 ki bazira na \textit{timsort} algoritmu, ki ima časovno zahtevnost $O(n \log n).$ Dodali smo le še funkcijo, ki računa kot med dvema točkama, kar pa se zgodi v linearnem času.
 
-Algoritem najprej točke uredi po kotu in ustvari prazen seznam (kopico), 
+Algoritem najprej točke uredi po kotu in ustvari prazen seznam (sklad), 
 v katerega bo dodajal točke, ki so v konveksni ovojnici.
 
-Najprej v kopico dodamo prvi dve točki iz urejenega seznama, ti bosta zagotovo tudi v konveksni ovojnici.
-Če je v kopici več kot ena točka, vzame zadnji dve točki v ovojnici in prvo iz urejenega seznama ter preveri kot med njimi. Če torej označimo zadnji dve točki iz kopice z $x$ in $y$ ter točko,
+Najprej v sklad dodamo prvi dve točki iz urejenega seznama, ti bosta zagotovo tudi v konveksni ovojnici.
+Če je v skladu več kot ena točka, vzame zadnji dve točki v ovojnici in prvo iz urejenega seznama ter preveri kot med njimi. Če torej označimo zadnji dve točki iz sklada z $x$ in $y$ ter točko,
 ki je prva v seznamu z $i$, izračunamo vektorski produkt $(x-y)\times(i-y)$. 
 Če je pozitiven (kot z vrhom v $y$ in krakoma skozi $x$ ter $i$ predstavlja ovinek v desno), točko izloči, 
-sicer pa jo doda na vrh kopice (v našem primeru na konec seznama). Ko pregleda vse urejene točke, se ustavi. 
+sicer pa jo doda na vrh sklada (v našem primeru na konec seznama). Ko pregleda vse urejene točke, se ustavi. 
 V zanki moramo le enkrat pregledati vse točke, in ker se vse zgoraj opisano računanje izvaja v linearnem času, je zahtevnost tega dela $O(n)$ (kar pa je manj od zahtevnosti urejanja,
 torej je to zgornja meja za zahtevnost algoritma).
 
